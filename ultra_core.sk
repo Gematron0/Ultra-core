@@ -4,7 +4,7 @@
 command uc.version():
   permission: op
   trigger:
-    send "V1.1 (Green Ray)"
+    send "V1.2 (Ticking Time)"
 
 ### Join and leave system ###
 
@@ -34,6 +34,25 @@ on join:
     add uuid of player to {First_Time_Joined::*}
     set {Lives.%uuid of player%} to 10
 
+command uc.time_reset():
+  permission: op
+  trigger:
+    set {timer_seconds_globle} to 0
+    set {timer_min_globle} to 0
+    set {timer_houer_globle} to 0
+
+every 1 second:
+  add 1 to {timer_seconds_globle}
+  if {timer_seconds_globle} is equal to 60:
+    set {timer_seconds_globle} to 0
+    add 1 to {timer_min_globle}
+  if {timer_min_globle} is equal to 60:
+    set {timer_min_globle} to 0
+    add 1 to {timer_houer_globle}
+
+command uc.time():
+  trigger:
+    send "%{timer_houer_globle}%:%{timer_min_globle}%:%{timer_seconds_globle}% / 2:30:0"
 
 # duisplaying the number of lives the user has once joined
 on join:
@@ -466,6 +485,7 @@ command uc.Start_round():
     send action bar "<yellow> Starting round soon..." to player
     wait 4 seconds
     send title "" with subtitle "<yellow> Sesion Started" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    execute console command "/uc.time_reset()"
     wait 30 seconds
     if {all_hunters} is true:
       make console execute command "uc.all_hunters.start(DNR)"

@@ -1177,4 +1177,1183 @@ command uc.manual_border() <integer>:
     send action bar "<yellow>[⚠] WORLD BORDER SHRINKING" to all players
     wait 3 seconds
     set {border_mm} to false
+    set {border_distance} to arg-1### event ###
+# hunters
+command uc.hunters.start(DNR):
+  permission: op
+  trigger:
+    clear {Hunters_uuids::*}
+    loop all players:
+      if loop-player's gamemode is not spectator:
+        add loop-player's uuid to {Hunters_uuids::*}
+        set {_randomIndex} to a random integer between 1 and size of {Hunters_uuids::*}
+    set {hunter} to {Hunters_uuids::%{_randomIndex}%}
+    set {_player} to ({hunter} parsed as offline player)
+    send title "" with subtitle "<green>§l>  §r<green>3  §l<" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    wait 1 second
+    send title "" with subtitle "<light green>§l> §r<light green>2 §l<" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    wait 1 second
+    send title "" with subtitle "<yellow>§l>§r<yellow>1§l<" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    wait 1 second
+    send title "" with subtitle "<green><>" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    send title "" with subtitle "<red>§l<>" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 second
+    send title "" with subtitle "<green><are>" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    send title "" with subtitle "<red>§l<e t>" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 second
+    send title "" with subtitle "<green><ou are In>" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    send title "" with subtitle "<red>§l<are the>" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 second
+    send title "" with subtitle "<green>< You are Innoc>" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    send title "" with subtitle "<red>§l<ou are the hun>" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 second
+    send title "" with subtitle "<green>< You are Innocent >" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    send title "" with subtitle "<red>§l< You are the Hunter >" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    wait 10 seconds
+    send "<red><bold>==========<white>{Private Information}<red>===========" to {_player}
+    send "- This piece of information only you would know; it is recommended to keep this a secret from other people" to {_player}
+    send "- You are a hunter; you are required to kill one member on this server to clear yourself from the hunter status" to {_player}
+    send "- Failure to kill one other member will result in termination of you at the end of the session" to {_player}
+on death:
+  if victim is a player:
+    if {hunter} contains uuid of attacker:
+      if attacker is victim:
+        send action bar "" to {hunter}
+      else:
+        send action bar "<red> Contract compleated" to attacker
+        clear {hunter}
+
+command uc.e0.compleat_hunter_contract():
+  permission: op
+  trigger:
+    send action bar "<red> contract status updated" to player
+    set {_player} to ({hunter} parsed as offline player)
+    send action bar "<red> Contract compleated" to {_player}
+    clear {hunter}
+
+command uc.e0.list_hunters():
+  permission: op
+  trigger:
+    send "%{hunter}%"
+    send "%{_player}%"
+
+# around the world
+command uc.around_the_world.start(DNR):
+  permission: op
+  trigger:
+    set {timer} to 600
+    while {around_the_world} is true:
+      wait 1 second
+      set {timer} to {timer} - 1
+      if {timer} = 0:
+        execute console command "/tick rate 15"
+        wait 2 seconds
+        loop all players:
+          execute console command "/ppo %loop-player% add dragon_breath popper"
+          execute console command "/ppo %loop-player% add dragon_breath quadhelix"
+        execute console command "/tick rate 10"
+        loop all players:
+          apply darkness without any particles whilst hiding the potion icon to the loop-player for 4 seconds
+          apply resistance 255  without any particles whilst hiding the potion icon to the loop-player for 5 seconds
+          apply invisibility  without any particles whilst hiding the potion icon to the loop-player for 3 seconds
+        wait 1 seconds
+        execute console command "/tick rate 5"
+        wait 0.5 seconds
+        execute console command "/tick rate 20"
+        loop all players:
+          if loop-player's gamemode is not spectator:
+            play 90000 dragon breath with offset of 0.6, 2, 0.6 and speed 0 at loop-player's location
+            teleport the player to the player
+            add loop-player's position to {currentlocations::*}
+        loop all players:
+          if loop-player's gamemode is not spectator:
+            set {_randomIndex} to a random integer between 1 and size of {currentlocations::*}
+            teleport loop-player to {currentlocations::%{_randomIndex}%}
+            play 90000 dragon breath with offset of 0.6, 2, 0.6 and speed 0.3 at loop-player's location
+        execute console command "/tick rate 1"
+        clear {currentlocations::*}
+        wait 0.125 second
+        execute console command "/tick rate 5"
+        wait 0.25 seconds
+        execute console command "/tick rate 10"
+        wait 0.5 seconds
+        execute console command "/tick rate 15"
+        wait 1 seconds
+        execute console command "/tick rate 20"
+        loop all players:
+          execute console command "/pp reset %loop-player%"
+        set {timer} to random integer between 600 and 1200
+        if {tutorial} is false:
+          wait 10 seconds
+          broadcast "<blue><bold>==========<white>{Event}<blue>=========="
+          broadcast "- You will now get teleported every few minutes"
+          set {tutorial} to true
+
+command uc.e2.info():
+  permission: op
+  trigger:
+    send "time untill next teleport: %{timer}%"
+
+# everyone is a hunters
+command uc.all_hunters.start(DNR):
+  permission: op
+  trigger:
+    clear {all_Hunters_list::*}
+    loop all players:
+      if loop-player's gamemode is not spectator:
+        add loop-player's uuid to {all_Hunters_list::*}
+    set {hunter} to {Hunters_uuids::%{_randomIndex}%}
+    send title "" with subtitle "<green>§l>  §r<green>3  §l<" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    wait 1 second
+    send title "" with subtitle "<light green>§l> §r<light green>2 §l<" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    wait 1 second
+    send title "" with subtitle "<yellow>§l>§r<yellow>1§l<" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    wait 1 second
+    send title "" with subtitle "<red>§l<>" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 second
+    send title "" with subtitle "<red>§l<e t>" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 second
+    send title "" with subtitle "<red>§l<are the>" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 second
+    send title "" with subtitle "<red>§l<ou are the hun>" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 second
+    send title "" with subtitle "<red>§l< You are the hunter >" to all players for 2 seconds with fadein 0 second and fade out 1 second
+    wait 10 seconds
+    broadcast "<red><bold>==========<white>{Private Information}<red>=========="
+    broadcast "- This piece of information only you would know; it is recommended to keep this a secret from other people"
+    broadcast "- You are a hunter; you are required to kill one member on this server to clear yourself from the hunter status"
+    broadcast "- Failure to kill one other member will result in termination of you at the end of the session"
+    wait 10 seconds
+    if {the_Border} is false:
+      broadcast "<blue><bold>==========<white>{Event}<blue>=========="
+      broadcast "- as this is the first episode no events will be happening today"
+
+on death:
+  if victim is a player:
+    if {all_Hunters_list::*} contains uuid of attacker:
+      remove uuid of attacker from {all_Hunters_list::*}
+      send action bar "<red> Contract compleated" to attacker
+
+command uc.e1.list_hunters:
+  permission: op
+  trigger:
+    send "%{all_Hunters_list::*}%" to player
+    loop {all_Hunters_list::*}:
+      set {_player} to {all_Hunters_list::%loop-index%} parsed as player
+      send "%{_player}%" to player
+
+command uc.e1.remove_hunter <player>:
+  permission: op
+  trigger:
+    remove uuid of arg-1 from {all_Hunters_list::*}
+    send action bar "<red> Contract compleated" to arg-1
+
+command uc.e1.add_hunter <player>:
+  permission: op
+  trigger:
+    add uuid of arg-1 to {all_Hunters_list::*}
+
+
+# disastors
+command uc.disastors.start(DNR):
+  permission: op
+  trigger:
+    set {timer_d} to 600
+    set {disastor} to a random integer between 1 and 10
+    while {Disasters} is true:
+      wait 1 second
+      set {current_event_running_in_disaters} to ""
+      set {timer_d} to {timer_d} - 1
+      if {timer_d} = 0:
+        set {event_mode} to true 
+        set {border_mm} to true
+        if {disastor} = 1:
+          wait 3 seconds
+          set {border_mm} to false
+          set {event_time} to a random integer between 120 and 300
+          while {event_mode} is true:
+            if {event_time} != 0:
+              if {Disasters} is true:
+                wait 1 second
+                set {event_time} to {event_time} - 1
+                loop all players:
+                  if block below the loop-player is Stone or Grass Block:
+                    damage loop-player by 0.5 hearts
+                  if {the_Border} is false:
+                    send action bar "<gray>Grass and Stone will make you take damage" to loop-player
+                  else:
+                    set {current_event_running_in_disaters} to "Grass and Stone will make you take damage"
+              else:
+                set {event_mode} to false 
+            else:
+              set {event_mode} to false 
+        if {disastor} = 2:
+          wait 3 seconds
+          set {border_mm} to false
+          set {event_time} to a random integer between 120 and 300
+          while {event_mode} is true:
+            if {event_time} != 0:
+              if {Disasters} is true:
+                wait 1 second
+                set {event_time} to {event_time} - 1
+                loop all players:
+                  if sunlight level at the loop-player is greater than 10:
+                    damage loop-player by 0.5 hearts
+                  if {the_Border} is false:
+                    send action bar "<gray>The sunlight will burn you" to loop-player
+                  else:
+                    set {current_event_running_in_disaters} to "The sunlight will burn you"
+              else:
+                set {event_mode} to false 
+            else:
+              set {event_mode} to false
+        if {disastor} = 3:
+          wait 3 seconds
+          set {border_mm} to false
+          set {event_time} to a random integer between 120 and 300
+          while {event_mode} is true:
+            if {event_time} != 0:
+              if {Disasters} is true:
+                wait 1 second
+                execute console command "/weather rain"
+                set {event_time} to {event_time} - 1
+                loop all players:
+                  if y coordinate of highest block at loop-player's location < y coordinate of loop-player:
+                    damage loop-player by 0.5 hearts
+                  if {the_Border} is false:
+                    send action bar "<gray>The rain will kill you" to loop-player
+                  else:
+                    set {current_event_running_in_disaters} to "The rain will kill you"
+              else:
+                set {event_mode} to false 
+                execute console command "/weather clear"
+            else:
+              set {event_mode} to false
+              execute console command "/weather clear"
+        if {disastor} = 4:
+          wait 3 seconds
+          set {border_mm} to false
+          set {event_time} to a random integer between 120 and 300
+          while {event_mode} is true:
+            if {event_time} != 0:
+              if {Disasters} is true:
+                wait 1 second
+                set {event_time} to {event_time} - 1
+                loop all players:
+                  if y-coordinate of loop-player < 50:
+                    damage loop-player by 0.5 hearts
+                  if y-coordinate of loop-player > 120:
+                    damage loop-player by 0.5 hearts
+                  if {the_Border} is false:
+                    send action bar "<gray>Dont be to low or to high" to loop-player
+                  else:
+                    set {current_event_running_in_disaters} to "Dont be to low or to high"
+              else:
+                set {event_mode} to false 
+            else:
+              set {event_mode} to false
+        if {disastor} = 5:
+          wait 3 seconds
+          set {border_mm} to false
+          set {event_time} to a random integer between 120 and 300
+          while {event_mode} is true:
+            if {event_time} != 0:
+              if {Disasters} is true:
+                wait 10 second
+                set {event_time} to {event_time} - 1
+                loop all players:
+                  if loop-player's gamemode is not spectator:
+                    spawn primed tnt 15 blocks above loop-player
+                  if {the_Border} is false:
+                    send action bar "<gray>Curfull for the falling explosives" to loop-player
+                  else:
+                    set {current_event_running_in_disaters} to "Curfull for the falling explosives"
+              else:
+                set {event_mode} to false
+            else:
+              set {event_mode} to false
+        if {disastor} = 6:
+          wait 3 seconds
+          set {border_mm} to false
+          set {event_time} to a random integer between 120 and 300
+          while {event_mode} is true:
+            if {event_time} != 0:
+              if {Disasters} is true:
+                set {explosive_death} to true
+                wait 1 second
+                set {event_time} to {event_time} - 1
+                loop all players:
+                  apply wind charged 255 without any particles whilst hiding the potion icon to the loop-player for 1 seconds
+                  if {the_Border} is false:
+                    send action bar "<gray>kamikaze mode" to loop-player
+                  else:
+                    set {current_event_running_in_disaters} to "kamikaze mode"
+              else:
+                set {event_mode} to false
+                set {explosive_death} to false
+            else:
+              set {event_mode} to false
+              set {explosive_death} to false
+        if {disastor} = 7:
+          wait 3 seconds
+          set {border_mm} to false
+          set {event_time} to a random integer between 120 and 300
+          while {event_mode} is true:
+            if {event_time} != 0:
+              if {Disasters} is true:
+                set {jump} to true
+                wait 1 second
+                set {event_time} to {event_time} - 1
+              else:
+                set {event_mode} to false
+                set {jump} to false
+              loop all players:
+                if {the_Border} is false:
+                  send action bar "<gray>Jump time" to loop-player
+                else:
+                  set {current_event_running_in_disaters} to "Jump time"
+            else:
+              set {event_mode} to false
+              set {jump} to false
+        if {disastor} = 8:
+          wait 3 seconds
+          set {border_mm} to false
+          set {event_time} to a random integer between 2 and 7
+          while {event_mode} is true:
+            if {event_time} != 0:
+              if {Disasters} is true:
+                wait 10 second
+                loop all players:
+                  if {the_Border} is false:
+                    send action bar "<gray>Telaprotation" to loop-player
+                  else:
+                    set {current_event_running_in_disaters} to "Telaprotation"
+                set {event_time} to {event_time} - 1
+                execute console command "/tick rate 15"
+                wait 2 seconds
+                loop all players:
+                  execute console command "/ppo %loop-player% add dragon_breath popper"
+                  execute console command "/ppo %loop-player% add dragon_breath quadhelix"
+                execute console command "/tick rate 10"
+                loop all players:
+                  apply darkness without any particles whilst hiding the potion icon to the loop-player for 4 seconds
+                  apply resistance 255  without any particles whilst hiding the potion icon to the loop-player for 5 seconds
+                  apply invisibility  without any particles whilst hiding the potion icon to the loop-player for 3 seconds
+                wait 1 seconds
+                execute console command "/tick rate 5"
+                wait 0.5 seconds
+                execute console command "/tick rate 20"
+                loop all players:
+                  if loop-player's gamemode is not spectator:
+                    play 5000 dragon breath with offset of 0.3, 2, 0.3 and speed 0 at loop-player's location
+                    add loop-player's position to {currentlocations::*}
+                loop all players:
+                  if loop-player's gamemode is not spectator:
+                    set {_randomIndex} to a random integer between 1 and size of {currentlocations::*}
+                    teleport loop-player to {currentlocations::%{_randomIndex}%}
+                    play 5000 dragon breath with offset of 0.3, 2, 0.3 and speed 0.3 at loop-player's location
+                execute console command "/tick rate 1"
+                clear {currentlocations::*}
+                wait 0.125 second
+                execute console command "/tick rate 5"
+                wait 0.25 seconds
+                execute console command "/tick rate 10"
+                wait 0.5 seconds
+                execute console command "/tick rate 15"
+                wait 1 seconds
+                execute console command "/tick rate 20"
+                loop all players:
+                  execute console command "/pp reset %loop-player%"
+              else:
+                set {event_mode} to false
+            else:
+              set {event_mode} to false
+        if {disastor} = 9:
+          wait 3 seconds
+          set {border_mm} to false
+          set {event_time} to a random integer between 20 and 70
+          while {event_mode} is true:
+            if {event_time} != 0:
+              if {Disasters} is true:
+                wait 5 second
+                set {event_time} to {event_time} - 1
+                loop all players:
+                  set {number} to a random integer between 1 and 31
+                  if {number} = 31:
+                    apply swiftness 200 without any particles whilst hiding the potion icon to the loop-player for 5 seconds
+                  else:
+                    apply swiftness {number} without any particles whilst hiding the potion icon to the loop-player for 5 seconds
+                  if {the_Border} is false:
+                    send action bar "<gray>Speed" to loop-player
+                  else:
+                    set {current_event_running_in_disaters} to "Speed"
+              else:
+                set {event_mode} to false
+            else:
+              set {event_mode} to false
+        if {disastor} = 10:
+          wait 3 seconds
+          set {border_mm} to false
+          set {event_time} to a random integer between 120 and 300
+          while {event_mode} is true:
+            set {food} to true
+            if {event_time} != 0:
+              if {Disasters} is true:
+                wait 1 second
+                set {event_time} to {event_time} - 1
+                if {the_Border} is false:
+                  loop all players:
+                    send action bar "<gray>you are currently hungry" to loop-player
+                else:
+                  set {current_event_running_in_disaters} to "you are currently hungry"
+              else:
+                set {event_mode} to false
+                set {food} to false
+            else:
+              set {event_mode} to false
+              set {food} to false
+
+        set {timer_d} to a random integer between 300 and 600
+        set {disastor} to a random integer between 1 and 10
+
+
+
+on death:
+  if {explosive_death} is true:
+    create an explosion of force 7 at the victim
+on jump:
+  if {jump} is true:
+    push player upwards with force 1
+on consume:
+  if {food} is true:
+    apply poison 2 without any particles whilst hiding the potion icon to the player for 5 seconds
+
+command uc.e3.info:
+  permission: op
+  trigger:
+    send "timer untill disaster: %{timer_d}%"
+    send "timer during disaster: %{event_time}%"
+    send "next disaster: %{disastor}%"
+
+# tasks
+command uc.tasks.start(DNR):
+  permission: op
+  trigger:
+    loop all players:
+      send action bar "<green> Pipe bomb being sent to evey user" to loop-player
+    wait 1 second
+    clear {compleated::*}
+    set {tasks::*} to 1,2,3,4,5,6,7,8,9 and 10
+    if {the_Border} is false:
+      loop all players:
+        set {_randomIndex} to a random integer between 1 and size of {tasks::*}
+        if {_randomIndex} = 1:
+          give loop-player 1 paper named "convince someone to eat a pufferfish without bribing them"
+        if {_randomIndex} = 2:
+          give loop-player 1 paper named "Stay within earshot/viewing distance of someone for 10 minutes without them knowing"
+        if {_randomIndex} = 3:
+          give loop-player 1 paper named "give someone an item of importance and make up a story on why you now hate said item (3 min long story)"
+        if {_randomIndex} = 4:
+          give loop-player 1 paper named "Build a rollercoaster spaning 200 blocks"
+        if {_randomIndex} = 5:
+          give loop-player 1 paper named "You must keep jmillar alive for the entire session If he dies you fail"
+        if {_randomIndex} = 6:
+          give loop-player 1 paper named "Call people anything but their username for the entire session"
+        if {_randomIndex} = 7:
+          give loop-player 1 paper named "Get 6 advancements"
+        if {_randomIndex} = 8:
+          give loop-player 1 paper named "Steal a crafting table from 5 peoples bases"
+        if {_randomIndex} = 9:
+          give loop-player 1 paper named "You can't attack anyone this session"
+        if {_randomIndex} = 10:
+          give loop-player 1 paper named "Get Caves and Cliffs Advancement"
+    else:
+      loop all players:
+        set {_randomIndex} to a random integer between 1 and size of {tasks::*}
+        if {_randomIndex} = 1:
+          give loop-player 1 paper named "convince someone to eat a pufferfish without bribing them"
+        if {_randomIndex} = 2:
+          give loop-player 1 paper named "kill a close member to you"
+        if {_randomIndex} = 3:
+          give loop-player 1 paper named "dont say anything for 10 min"
+        if {_randomIndex} = 4:
+          give loop-player 1 paper named "Kill a player"
+        if {_randomIndex} = 5:
+          give loop-player 1 paper named "gain any achivment"
+        if {_randomIndex} = 6:
+          give loop-player 1 paper named "fly/fall for 10 seconds"
+        if {_randomIndex} = 7:
+          give loop-player 1 paper named "be on 1/2 a heart for 12 seconds"
+        if {_randomIndex} = 8:
+          give loop-player 1 paper named "Steal a crafting table from 3 peoples bases"
+        if {_randomIndex} = 9:
+          give loop-player 1 paper named "kill 2 people"
+        if {_randomIndex} = 10:
+          give loop-player 1 paper named "kill 3 people"
+    wait 10 seconds
+    broadcast "<blue><bold>==========<white>{Event}<blue>=========="
+    broadcast "- you have receved a pipe bomb in your inventory"
+    broadcast "- compleat the task of the pipe bomb inside of your inventory and you will not die at the end of the section"
+    broadcast "- if you do not compleat the pipe bomb in your inventory; at the end of the section you will die"
+    broadcast "- (once you compleated the pipe bomb; spam right click while holding the pipe bomb untill it dissapears)"
+    broadcast "- (if you did not recive a pipe bomb; run command /uc.newTask() to recive a task)"
+command uc.newTask():
+  trigger:
+    set {tasks::*} to 1,2,3,4,5,6,7,8,9 and 10
+    if {the_Border} is false:
+      set {_randomIndex} to a random integer between 1 and size of {tasks::*}
+      if {_randomIndex} = 1:
+        give player 1 paper named "convince someone to eat a pufferfish without bribing them"
+      if {_randomIndex} = 2:
+        give player 1 paper named "Stay within earshot/viewing distance of someone for 10 minutes without them knowing"
+      if {_randomIndex} = 3:
+        give player 1 paper named "give someone an item of importance and make up a story on why you now hate said item (3 min long story)"
+      if {_randomIndex} = 4:
+        give player 1 paper named "Build a rollercoaster spaning 200 blocks"
+      if {_randomIndex} = 5:
+        give player 1 paper named "You must keep jmillar alive for the entire session If he dies you fail"
+      if {_randomIndex} = 6:
+        give player 1 paper named "Call people anything but their username for the entire session"
+      if {_randomIndex} = 7:
+        give player 1 paper named "Get 6 advancements"
+      if {_randomIndex} = 8:
+        give player 1 paper named "Steal a crafting table from 5 peoples bases"
+      if {_randomIndex} = 9:
+        give player 1 paper named "You can't attack anyone this session"
+      if {_randomIndex} = 10:
+        give player 1 paper named "Get Caves and Cliffs Advancement"
+    else:
+      set {_randomIndex} to a random integer between 1 and size of {tasks::*}
+      if {_randomIndex} = 1:
+        give player 1 paper named "convince someone to eat a pufferfish without bribing them"
+      if {_randomIndex} = 2:
+        give player 1 paper named "kill a close member to you"
+      if {_randomIndex} = 3:
+        give player 1 paper named "dont say anything for 10 min"
+      if {_randomIndex} = 4:
+        give player 1 paper named "Kill a player"
+      if {_randomIndex} = 5:
+        give player 1 paper named "gain any achivment"
+      if {_randomIndex} = 6:
+        give player 1 paper named "fly/fall for 10 seconds"
+      if {_randomIndex} = 7:
+        give player 1 paper named "be on 1/2 a heart for 12 seconds"
+      if {_randomIndex} = 8:
+        give player 1 paper named "Steal a crafting table from 3 peoples bases"
+      if {_randomIndex} = 9:
+        give player 1 paper named "kill 2 people"
+      if {_randomIndex} = 10:
+        give player 1 paper named "kill 3 people"
+on right click:
+  if event-item is a paper named "convince someone to eat a pufferfish without bribing them","Stay within earshot/viewing distance of someone for 10 minutes without them knowing","give someone an item of importance and make up a story on why you now hate said item (3 min long story)","Build a rollercoaster spaning 200 blocks","You must keep jmillar alive for the entire session If he dies you fail","Get 6 advancements","Steal a crafting table from 5 peoples bases","Call people anything but their username for the entire session","You can't attack anyone this session", or "Get Caves and Cliffs Advancement":
+    remove event-item from the player's inventory
+    add uuid of player to {compleated::*}
+    send action bar "<green> Task compleated" to player
+    play 1000 totem with offset of 1, 1, 0 and speed 0.3 at location of player
+  else if event-item is a paper named "convince someone to eat a pufferfish without bribing them","kill a close member to you","dont say anything for 10 min","Kill a player","gain any achivment","fly/fall for 10 seconds","be on 1/2 a heart for 12 seconds","Steal a crafting table from 3 peoples bases","Steal a crafting table from 3 peoples bases","kill 2 people", or "kill 3 people":
+    remove event-item from the player's inventory
+    send action bar "<green> Task compleated" to player
+    play 1000 totem with offset of 1, 1, 0 and speed 0.3 at location of player
+    give event-player 1 iron block
+# world boss
+command uc.world_boss.start(DNR):
+  permission: op
+  trigger:
+    clear {Worldboss_uuids::*}
+    loop all players:
+      if loop-player's gamemode is not spectator:
+        add loop-player's uuid to {Worldboss_uuids::*}
+    set {_randomIndex} to a random integer between 1 and size of {Worldboss_uuids::*}
+    loop 20 times:
+      set {_randomIndex} to a random integer between 1 and size of {Worldboss_uuids::*}
+    set {current_worldboss} to {Worldboss_uuids::%{_randomIndex}%}
+    set {_player} to ({current_worldboss} parsed as offline player)
+    send title "" with subtitle "<red>░░░ ░░░ ░░░ ░░░░░ ░░░░" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<red>y░░ a░░ t░░ W░░l░ ░o░░" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<red>yo░ ar░ th░ Wo░ld ░os░" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<red>you are the World Boss" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    set {timer_s} to 0
+    set {timer_m} to 0
+    wait 10 seconds
+    send "<red><bold>==========<white>{Private Information}<red>==========" to {_player}
+    send "- This piece of information only you would know; it is recommended to keep this a secret from other people" to {_player}
+    send "- You are the world boss; no one knows that you are the world boss currently" to {_player}
+    send "- Every 5 minutes after the first 10 minutes, something about the current world boss will be revealed to the server" to {_player}
+    send "- If a player kills you, you are no longer the world boss, and the attacker will become the world boss instead" to {_player}
+    send "- Live and stay the world boss until the session ends to gain a reward" to {_player}
+    send "- Note for the first world boss: The activity will become publicly known after your death or 20 minutes from now" to {_player}
+    while {worldboss} is true:
+      add 1 to {timer_s}
+      wait 1 second
+      if {the_Border} is false:
+        send action bar "<red>░░░[%{timer_m}%:%{timer_s}%]░░░" to ({current_worldboss} parsed as offline player)
+      set {_player} to ({current_worldboss} parsed as offline player)
+      if {the_Border} is true:
+        loop all players:
+          if {current_worldboss} does not contain uuid of loop-players:
+            apply strength to the player for 1 second
+      if {current_worldboss} is not set:
+        wait 20 seconds
+        clear {Worldboss_uuids::*}
+        loop all players:
+          if loop-player's gamemode is not spectator:
+            add loop-player's uuid to {Worldboss_uuids::*}
+        set {_randomIndex} to a random integer between 1 and size of {Worldboss_uuids::*}
+        loop 20 times:
+          set {_randomIndex} to a random integer between 1 and size of {Worldboss_uuids::*}
+        set {current_worldboss} to {Worldboss_uuids::%{_randomIndex}%}
+        set {_player} to ({current_worldboss} parsed as offline player)
+        send title "" with subtitle "<red>░░░ ░░░ ░░░ ░░░░░ ░░░░" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+        wait 0.25 seconds
+        send title "" with subtitle "<red>y░░ a░░ t░░ W░░l░ ░o░░" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+        wait 0.25 seconds
+        send title "" with subtitle "<red>yo░ ar░ th░ Wo░ld ░os░" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+        wait 0.25 seconds
+        send title "" with subtitle "<red>you are the World Boss" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+        set {timer_s} to 0
+        set {timer_m} to 0
+        wait 10 seconds
+      if {the_Border} is true:
+        set {_player} to ({current_worldboss} parsed as offline player)
+        loop all players:
+          if loop-player is {_player}:
+            apply strength without any particles whilst hiding the potion icon to the loop-player for 1 second
+      if {worldBoss::L1} is true:
+        play 1000 ash with offset of 50, 50, 50 and speed 0 at location of {_player}
+      if {worldBoss::L2} is true:
+        loop all players:
+          if loop-player is {_player}:
+            apply weakness without any particles whilst hiding the potion icon to the loop-player for 1 second
+      if {worldBoss::L4} is true:
+        broadcast "<blue><bold>==========<white>{Event}<blue>=========="
+        broadcast "- The current world boss is: %{_player}%"
+        set {worldBoss::L4} to false
+      if {worldBoss::L3} is true:
+        execute console command "/ppo %{_player}% reset %{_player}%"
+        execute console command "/ppo %{_player}% add dust wings black"
+        play 7000 ash with offset of 25, 25, 25 and speed 0.2 at location of {_player}
+      if {worldBoss::L5} is true:
+        loop all players:
+          if loop-player is {_player}:
+            apply slowness 2 without any particles whilst hiding the potion icon to the loop-player for 1 second
+            apply glowing without any particles whilst hiding the potion icon to the loop-player for 1 second
+      if {timer_s} is equal to 59:
+        add 1 to {timer_m}
+        set {timer_s} to -1
+        if {timer_m} is equal to 1:
+          set {worldBoss::L1} to true
+        if {timer_m} is equal to 2:
+          if {tutorial} is false:
+            set {tutorial} to true
+            set {worldBoss::L2} to true
+            broadcast "<blue><bold>==========<white>{Event}<blue>=========="
+            broadcast "- There is a world boss among you guys"
+            broadcast "- Kill the world boss, and you will become the world boss instead"
+            broadcast "- If you live and stay a world boss until the session ends, you will gain a reward"
+            broadcast "- Every 5 minutes, after the first 10 minutes, the world boss will reveal something about the current location"
+        if {timer_m} is equal to 3:
+          set {worldBoss::L3} to true
+        if {timer_m} is equal to 4:
+          set {worldBoss::L4} to true
+        if {timer_m} is equal to 5:
+          set {worldBoss::L5} to true
+        if {timer_m} is equal to 6:
+          set {worldBoss::L6} to true
+        if {worldBoss::L6} is true:
+          loop all players:
+            if loop-player is {_player}:
+              set {loc} to loop-player's location
+          broadcast "<blue><bold>==========<white>{Event}<blue>=========="
+          broadcast "- The current world boss is: %{_player}%"
+          broadcast "- Its current location is: %{loc}%"
+on death:
+  if {worldboss} is true:
+    if attacker is a player:
+      if {current_worldboss} contains uuid of victim:
+        if attacker is victim:
+          send action bar "[%{timer_m}%:%{timer_s}%]" to {_player}
+        else:
+          set {worldBoss::L6} to false
+          set {worldBoss::L5} to false
+          set {worldBoss::L4} to false
+          set {worldBoss::L3} to false
+          set {worldBoss::L2} to false
+          set {worldBoss::L1} to false
+          execute console command "/ppo %victim% reset %victim%"
+          set {current_worldboss} to uuid of attacker
+          set {_player} to ({current_worldboss} parsed as offline player)
+          set {timer_s} to 0
+          set {timer_m} to 0
+          send title "" with subtitle "<red>░░░ ░░░ ░░░ ░░░░░ ░░░░" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+          wait 0.25 seconds
+          send title "" with subtitle "<red>y░░ a░░ t░░ w░░l░ ░o░░" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+          wait 0.25 seconds
+          send title "" with subtitle "<red>yo░ ar░ th░ wo░ld ░os░" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+          wait 0.25 seconds
+          send title "" with subtitle "<red>you are the world boss" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+          apply resistance 255 without any particles whilst hiding the potion icon to the attacker for 5 seconds
+          wait 1 seconds
+          if {tutorial} is false:
+            set {tutorial} to true
+            wait 10 seconds
+            send "<red><bold>==========<white>{Private Information}<red>==========" to attacker
+            send "- This piece of information only you would know; it is recommended to keep this a secret from other people" to attacker
+            send "- You are the world boss; no one knows that you are the world boss currently" to attacker
+            send "- Every 5 minutes, after the first 10 minutes, you will reveal something about yourself to the server" to attacker
+            send "- If a player kills you, you are no longer the world boss, and the attacker will become the world boss instead" to attacker
+            send "- Live and stay the world boss until the session ends to gain a reward" to attacker
+            wait 30 seconds
+            broadcast "<blue><bold>==========<white>{Event}<blue>=========="
+            broadcast "- There is a world boss among you guys"
+            broadcast "- Kill the world boss, and you will become the world boss instead"
+            broadcast "- If you live and stay a world boss until the session ends, you will gain a reward"
+            broadcast "- Every 5 minutes, after the first 10 minutes, the world boss will reveal something about the current location"
+# the investigation
+command uc.investigation(DNR):
+  permission: op
+  trigger:
+    clear {investigation_uuids::*}
+    clear {investigation::*}
+    clear {investigation.1}
+    clear {investigation.2}
+    clear {investigation.3}
+    set {investigation_deaths} to 0
+    loop all players:
+      if loop-player's gamemode is not spectator:
+        add loop-player's uuid to {investigation_uuids::*}
+    set {_randomIndex} to a random integer between 1 and size of {investigation_uuids::*}
+    set {investigation.1} to {investigation_uuids::%{_randomIndex}%}
+    remove {investigation_uuids::%{_randomIndex}%} from {investigation_uuids::*}
+    set {_randomIndex} to a random integer between 1 and size of {investigation_uuids::*}
+    set {investigation.2} to {investigation_uuids::%{_randomIndex}%}
+    remove {investigation_uuids::%{_randomIndex}%} from {investigation_uuids::*}
+    set {_randomIndex} to a random integer between 1 and size of {investigation_uuids::*}
+    set {investigation.3} to {investigation_uuids::%{_randomIndex}%}
+    set {_player} to ({investigation.1} parsed as offline player)
+    send title "" with subtitle "<purple>                █" to ({investigation.1} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>             █ter" to ({investigation.1} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>          █hunter" to ({investigation.1} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>       █ a hunter" to ({investigation.1} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>    █are a hunter" to ({investigation.1} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple> █ou are a hunter" to ({investigation.1} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>█ You are a hunter" to ({investigation.1} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>                █" to ({investigation.2} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>             █ter" to ({investigation.2} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>          █hunter" to ({investigation.2} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>       █ a hunter" to ({investigation.2} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>    █are a hunter" to ({investigation.2} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple> █ou are a hunter" to ({investigation.2} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>█ You are a hunter" to ({investigation.2} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>                █" to ({investigation.3} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>             █ter" to ({investigation.3} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>          █hunter" to ({investigation.3} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>       █ a hunter" to ({investigation.3} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>    █are a hunter" to ({investigation.3} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple> █ou are a hunter" to ({investigation.3} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<purple>█ You are a hunter" to ({investigation.3} parsed as offline player) for 2 seconds with fadein 0 second and fade out 1 second
+    set {timer_s_i} to 1
+    set {timer_m_i} to 30
+    set {investigation_mm} to false
+    set {tutorial} to false
+    wait 10 seconds
+    set {investigation_last_death} to ""
+    send "<red><bold>==========<white>{Privet information}<red>==========" to ({investigation.1} parsed as offline player) and ({investigation.2} parsed as offline player) and ({investigation.3} parsed as offline player) 
+    send "- This piece of infomration is sent to only you and 2 other poeple; it is recomended to keep this a secret from other people" to ({investigation.1} parsed as offline player) and ({investigation.2} parsed as offline player) and ({investigation.3} parsed as offline player) 
+    send "- You are a hunter (allong with 2 other poeple); you need to kill as many people at possible without dying" to ({investigation.1} parsed as offline player) and ({investigation.2} parsed as offline player) and ({investigation.3} parsed as offline player) 
+    send "- there is a timer that started off at 20 miniuts; every time you get a kill the timer will increace by the kill; the more kills the less the timer will gain (20m,15m,10m,5m,1m)" to ({investigation.1} parsed as offline player) and ({investigation.2} parsed as offline player) and ({investigation.3} parsed as offline player) 
+    send "- If the timer hits 0; the rest of the server will know what the task is and have a higher liklyhood trying to kill you" to ({investigation.1} parsed as offline player) and ({investigation.2} parsed as offline player) and ({investigation.3} parsed as offline player) 
+    send "- If any hunter killed a victum; that victum name will be displayed to all hunters and that victum (logicly) cant be the hunter" to ({investigation.1} parsed as offline player) and ({investigation.2} parsed as offline player) and ({investigation.3} parsed as offline player) 
+    send "- If you get killed by anyone else from the server; you will not be a hunter anymore" to ({investigation.1} parsed as offline player) and ({investigation.2} parsed as offline player) and ({investigation.3} parsed as offline player) 
+    send "- You will win if one of the three teammates are not killed at the end of the secion" to ({investigation.1} parsed as offline player) and ({investigation.2} parsed as offline player) and ({investigation.3} parsed as offline player) 
+    while {Investigation} is true:
+      set {timer_s_i} to {timer_s_i} - 1
+      if {tutorial} is false:
+        if {investigation_mm} is false:
+          set {_player} to ({investigation_last_death} parsed as offline player)
+          send action bar "<purple>< %{timer_m_i}%:%{timer_s_i}% > < Last killed: %{_player}% >" to ({investigation.1} parsed as offline player)
+          send action bar "<purple>< %{timer_m_i}%:%{timer_s_i}% > < Last killed: %{_player}% >" to ({investigation.2} parsed as offline player)
+          send action bar "<purple>< %{timer_m_i}%:%{timer_s_i}% > < Last killed: %{_player}% >" to ({investigation.3} parsed as offline player)
+      wait 1 second
+      if {timer_s_i} is equal to 0:
+        set {timer_m_i} to {timer_m_i} - 1
+        set {timer_s_i} to 60
+        if {timer_m_i} is equal to -1:
+          broadcast "<blue><bold>==========<white>{Event}<blue>=========="
+          broadcast "- there are 3 other hunters ammong you guyes; if you are not a hunter, you are an investigator"
+          broadcast "- kill them to remove from hunter status; as they been (secrectly) killing you all"
+          broadcast "- if you dont kill the hunters in time; they will revice a reward"
+          set {tutorial} to true
+
+on death:
+  if {Investigation} is true:
+    if attacker is a player:
+      if victim is a player:
+        if {investigation.1} contains uuid of victim:
+          clear {investigation.1}
+        if {investigation.2} contains uuid of victim:
+          clear {investigation.2}
+        if {investigation.3} contains uuid of victim:
+          clear {investigation.3}
+        set {investigation_deaths} to {investigation_deaths} + 1
+        set {investigation_last_death} to uuid of victim
+        if {investigation_deaths} is 1:
+          add 20 to {timer_m_i}
+        else if {investigation_deaths} is 2:
+          add 10 to {timer_m_i}
+        else if {investigation_deaths} is 3:
+          add 5 to {timer_m_i}
+        else if {investigation_deaths} is 4:
+          add 5 to {timer_m_i}
+        else if {investigation_deaths} is 5:
+          add 1 to {timer_m_i}
+        else:
+          add 0 to {timer_m_i}
+on death:
+  if {Investigation} is true:
+    if attacker is {investigation.1} or {investigation.2} or {investigation.3}:
+      if victim is a player:
+        set {investigation_mm} to true
+        send action bar "<purple>< ☠ > <white>%victim%" to ({investigation.1} parsed as offline player)
+        send action bar "<purple>< ☠ > <white>%victim%" to ({investigation.2} parsed as offline player)
+        send action bar "<purple>< ☠ > <white>%victim%" to ({investigation.3} parsed as offline player)
+        wait 3 seconds
+        set {investigation_mm} to false                           
+# the hourde
+command uc.The_hourde.start(DNR):
+  permission: op
+  trigger:
+    clear {The_hourde::*}
+    clear {The_hourde_uuids::*}
+    clear {current_The_hourde}
+    clear {all_uuids::*}
+    loop all players:
+      if loop-player's gamemode is not spectator:
+        add loop-player's uuid to {The_hourde_uuids::*}
+    set {_randomIndex} to a random integer between 1 and size of {The_hourde_uuids::*}
+    set {current_The_hourde} to {The_hourde_uuids::%{_randomIndex}%}
+    set {The_hourde::*} to {The_hourde_uuids::%{_randomIndex}%}
+    set {_player} to ({current_The_hourde} parsed as offline player)
+    send title "" with subtitle "<green><light green>🧟 You               🧟" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<green>🧟 You <light green>been          🧟" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<green>🧟 You been <light green>infected 🧟" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<green>🧟 You been infected 🧟" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    wait 10 seconds
+    send "<red><bold>==========<white>{Privet information}<red>==========" to {_player}
+    send "- This piece of infomration only you would know; it is recomended to keep this a secret from other people" to {_player}
+    send "- You are the The first infected; noone else on the server is infected accept for you" to {_player}
+    send "- Your gole is to go to other people and to infect them; by killing them" to {_player}
+    send "- once killed; they will also become infected; and will have the same task as you" to {_player}
+    send "- the server will know what the event is after your first kill" to {_player}
+    send "- kill all of them; for a reward" to {_player}
+on death:
+  if {the_horde} is true:
+    if attacker is a player:
+      if victim is a player:
+        if {The_hourde::*} does not contain uuid of victim:
+          remove uuid of victim from {The_hourde::*}
+          add uuid of victim to {The_hourde::*}
+          loop all players:
+            if {The_hourde::*} contains uuid of loop-player:
+              send action bar "<green>[+1🧟]<white> %victim%" to loop-player
+          wait 10 seconds
+          send title "" with subtitle "<green><light green>🧟 You               🧟" to victim for 2 seconds with fadein 0 second and fade out 1 second
+          wait 0.25 seconds
+          send title "" with subtitle "<green>🧟 You <light green>been          🧟" to victim for 2 seconds with fadein 0 second and fade out 1 second
+          wait 0.25 seconds
+          send title "" with subtitle "<green>🧟 You been <light green>infected 🧟" to victim for 2 seconds with fadein 0 second and fade out 1 second
+          wait 0.25 seconds
+          send title "" with subtitle "<green>🧟 You been infected 🧟" to victim for 2 seconds with fadein 0 second and fade out 1 second
+          wait 10 seconds
+          send "<red><bold>==========<white>{Privet information}<red>==========" to victim
+          send "- Your gole is to go to other people and to infect them; by killing them" to victim
+          send "- once killed; they will also become infected; and will have the same task as you" to victim
+          send "- kill all members on the server for a reward" to victim
+          if {tutorial} is false:
+            broadcast "<blue><bold>==========<white>{Event}<blue>=========="
+            broadcast "- One person in infected"
+            broadcast "- every person they kill; will also get infected"
+            broadcast "- once the entier server is infected; the infected will win; dont get killed by the infection and you will win"
+            set {tutorial} to true
+        else:
+          remove uuid of victim from {The_hourde::*}
+          add uuid of victim to {The_hourde::*}
+# the border
+command uc.border(DNR):
+  permission: op
+  trigger:
+    send action bar "<yellow>[⚠] ????? ?????? ?????????" to all players
+    wait 2 seconds
+    set {border_distance} to 50
+    set {border_current_distance} to 550
+    set {border_deaths} to 0
+    set {members} to 0
+    loop all players:
+      if loop-player's gamemode is not spectator:
+        if {Lives.%uuid of loop-player%} = 10: 
+          set {border_distance} to {border_distance} + 50
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 9:
+          set {border_distance} to {border_distance} + 45
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 8: 
+          set {border_distance} to {border_distance} + 40
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 7: 
+          set {border_distance} to {border_distance} + 35
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 6: 
+          set {border_distance} to {border_distance} + 30
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 5: 
+          set {border_distance} to {border_distance} + 25
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 4: 
+          set {border_distance} to {border_distance} + 20
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 3: 
+          set {border_distance} to {border_distance} + 15
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 2: 
+          set {border_distance} to {border_distance} + 10
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 1: 
+          set {border_distance} to {border_distance} + 5
+          set {members} to {members} + 1
+      if {player.DeathAnnimation.%uuid of loop-player%} is true:
+        if {Lives.%uuid of loop-player%} = 10: 
+          set {border_distance} to {border_distance} + 50
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 9:
+          set {border_distance} to {border_distance} + 45
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 8: 
+          set {border_distance} to {border_distance} + 40
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 7: 
+          set {border_distance} to {border_distance} + 35
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 6: 
+          set {border_distance} to {border_distance} + 30
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 5: 
+          set {border_distance} to {border_distance} + 25
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 4: 
+          set {border_distance} to {border_distance} + 20
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 3: 
+          set {border_distance} to {border_distance} + 15
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 2: 
+          set {border_distance} to {border_distance} + 10
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 1: 
+          set {border_distance} to {border_distance} + 5
+          set {members} to {members} + 1
+        if {border_current_distance} >= {border_distance}:
+          set {border_current_distance} to 550
+    set {border_mm} to false
+    set {members_cound_excides} to true
+    set {current_event_running_in_disaters} to ""
+    while {the_Border} is true:
+      wait 2 seconds
+      wait 1 tick
+      set {tutorial} to true
+      if {border_mm} is false:
+        send action bar "<yellow>█%{border_current_distance}%/%{border_distance}%█ <grey>%{current_event_running_in_disaters}%" to all players
+        set {_player} to ({current_worldboss} parsed as offline player)
+        send action bar "<yellow>█%{border_current_distance}%/%{border_distance}%█ <red>░░░[%{timer_m}%:%{timer_s}%]░░░ <grey>%{current_event_running_in_disaters}%" to {_player}
+      if {border_current_distance} > {border_distance}:
+        make console execute command "/worldborder add -1 2"
+        set {border_current_distance} to {border_current_distance} - 1
+        if {members_cound_excides} is true:
+          if {members} <= 4:
+            set {members_cound_excides} to false
+            set {border_deaths} to 6
+            set {around_the_world} to false
+            set {tasks} to false
+            set {worldboss} to false
+            set {the_horde} to false
+            set {Disasters} to false
+            set {all_hunters} to false
+            loop all players:
+              if {all_Hunters_list::*} contains uuid of loop-player:
+                send action bar "<red> Contract failed" to loop-player
+            wait 2 seconds
+            loop all players:
+              if {all_Hunters_list::*} contains uuid of loop-player:
+                send action bar "<red> exacution in [10s]" to loop-player
+                execute console command "/ppo %loop-player% add dust beam red"
+            wait 1 second
+            loop all players:
+              if {all_Hunters_list::*} contains uuid of loop-player:
+                send action bar "<red> exacution in [09s]" to loop-player
+            wait 1 second
+            loop all players:
+              if {all_Hunters_list::*} contains uuid of loop-player:
+                send action bar "<red> exacution in [08s]" to loop-player
+            wait 1 second
+            loop all players:
+              if {all_Hunters_list::*} contains uuid of loop-player:
+                send action bar "<red> exacution in [07s]" to loop-player
+            wait 1 second
+            loop all players:
+              if {all_Hunters_list::*} contains uuid of loop-player:
+                send action bar "<red> exacution in [06s]" to loop-player
+            wait 1 second
+            loop all players:
+              if {all_Hunters_list::*} contains uuid of loop-player:
+                send action bar "<red> exacution in [05s]" to loop-player
+            wait 1 second
+            loop all players:
+              if {all_Hunters_list::*} contains uuid of loop-player:
+                send action bar "<red> exacution in [04s]" to loop-player
+            wait 1 second
+            loop all players:
+              if {all_Hunters_list::*} contains uuid of loop-player:
+                send action bar "<red> exacution in [03s]" to loop-player
+            wait 1 second
+            loop all players:
+              if {all_Hunters_list::*} contains uuid of loop-player:
+                send action bar "<red> exacution in [02s]" to loop-player
+            wait 1 second
+            loop all players:
+              if {all_Hunters_list::*} contains uuid of loop-player:
+                send action bar "<red> exacution in [01s]" to loop-player
+            wait 1 second
+            loop all players:
+              if {all_Hunters_list::*} contains uuid of loop-player:
+                send action bar "<red> exacution in [00s]" to loop-player
+                play 600 flame with offset of 1, 1, 1 and speed 0.1 at location of player
+                execute console command "/ppo %loop-player% reset"
+                kill loop-player
+on death of player:
+  if {the_Border} is true:
+    wait 3 seconds
+    set {border_mm} to true
+    set {border_deaths} to {border_deaths} + 1
+    if {border_deaths} = 1:
+      send action bar "<yellow>[⚠] ????D ????E? ???I????G" to all players
+      set {around_the_world} to true
+      wait 3 seconds
+      make console execute command "uc.around_the_world.start(DNR)"
+    else if {border_deaths} = 2:
+      send action bar "<yellow>[⚠] W???? B???E? S?????IN?" to all players
+      set {tasks} to true
+      wait 3 seconds
+      make console execute command "uc.tasks.start(DNR)"
+    else if {border_deaths} = 3:
+      send action bar "<yellow>[⚠] WO??? BO???R SHR???I??" to all players
+      set {worldboss} to true
+      wait 3 seconds
+      make console execute command "uc.world_boss.start(DNR)"
+    else if {border_deaths} = 4:
+      send action bar "<yellow>[⚠] WO?LD BO?DE? SH??NKI?G" to all players
+      set {Disasters} to true
+      wait 3 seconds
+      make console execute command "uc.disastors.start(dnr)"
+    else if {border_deaths} = 5:
+      send action bar "<yellow>[⚠] WORLD BORDER SHRINKING" to all players
+    else:
+      send action bar "<yellow>[⚠] WORLD BORDER SHRINKING" to all players
+    wait 3 seconds
+    set {border_mm} to false
+    set {border_distance} to 50
+    set {members} to 0
+    loop all players:
+      if loop-player's gamemode is not spectator:
+        if {Lives.%uuid of loop-player%} = 10: 
+          set {border_distance} to {border_distance} + 50
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 9:
+          set {border_distance} to {border_distance} + 45
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 8: 
+          set {border_distance} to {border_distance} + 40
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 7: 
+          set {border_distance} to {border_distance} + 35
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 6: 
+          set {border_distance} to {border_distance} + 30
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 5: 
+          set {border_distance} to {border_distance} + 25
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 4: 
+          set {border_distance} to {border_distance} + 20
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 3: 
+          set {border_distance} to {border_distance} + 15
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 2: 
+          set {border_distance} to {border_distance} + 10
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 1: 
+          set {border_distance} to {border_distance} + 5
+          set {members} to {members} + 1
+      if {player.DeathAnnimation.%uuid of loop-player%} is true:
+        if {Lives.%uuid of loop-player%} = 10: 
+          set {border_distance} to {border_distance} + 50
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 9:
+          set {border_distance} to {border_distance} + 45
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 8: 
+          set {border_distance} to {border_distance} + 40
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 7: 
+          set {border_distance} to {border_distance} + 35
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 6: 
+          set {border_distance} to {border_distance} + 30
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 5: 
+          set {border_distance} to {border_distance} + 25
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 4: 
+          set {border_distance} to {border_distance} + 20
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 3: 
+          set {border_distance} to {border_distance} + 15
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 2: 
+          set {border_distance} to {border_distance} + 10
+          set {members} to {members} + 1
+        if {Lives.%uuid of loop-player%} = 1: 
+          set {border_distance} to {border_distance} + 5
+          set {members} to {members} + 1
+command uc.manual_border() <integer>:
+  permission: op
+  trigger:
+    set {border_mm} to true
+    send action bar "<yellow>[⚠] WORLD BORDER SHRINKING" to all players
+    wait 3 seconds
+    set {border_mm} to false
     set {border_distance} to arg-1
