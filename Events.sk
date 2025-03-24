@@ -44,13 +44,19 @@ on death:
         send action bar "<red> Contract compleated" to attacker
         clear {hunter}
 
-command uc.compleat_hunter_contract():
+command uc.e0.compleat_hunter_contract():
   permission: op
   trigger:
     send action bar "<red> contract status updated" to player
     set {_player} to ({hunter} parsed as offline player)
     send action bar "<red> Contract compleated" to {_player}
     clear {hunter}
+
+command uc.e0.list_hunters():
+  permission: op
+  trigger:
+    send "%{hunter}%"
+    send "%{_player}%"
 
 # around the world
 command uc.around_the_world.start(DNR):
@@ -60,7 +66,7 @@ command uc.around_the_world.start(DNR):
     while {around_the_world} is true:
       wait 1 second
       set {timer} to {timer} - 1
-      if {timer} >= 0:
+      if {timer} = 0:
         execute console command "/tick rate 15"
         wait 2 seconds
         loop all players:
@@ -77,13 +83,14 @@ command uc.around_the_world.start(DNR):
         execute console command "/tick rate 20"
         loop all players:
           if loop-player's gamemode is not spectator:
-            play 5000 dragon breath with offset of 0.3, 2, 0.3 and speed 0 at loop-player's location
+            play 90000 dragon breath with offset of 0.6, 2, 0.6 and speed 0 at loop-player's location
+            teleport the player to the player
             add loop-player's position to {currentlocations::*}
         loop all players:
           if loop-player's gamemode is not spectator:
             set {_randomIndex} to a random integer between 1 and size of {currentlocations::*}
             teleport loop-player to {currentlocations::%{_randomIndex}%}
-            play 5000 dragon breath with offset of 0.3, 2, 0.3 and speed 0.3 at loop-player's location
+            play 90000 dragon breath with offset of 0.6, 2, 0.6 and speed 0.3 at loop-player's location
         execute console command "/tick rate 1"
         clear {currentlocations::*}
         wait 0.125 second
@@ -96,14 +103,14 @@ command uc.around_the_world.start(DNR):
         execute console command "/tick rate 20"
         loop all players:
           execute console command "/pp reset %loop-player%"
-        set {timer} to random number between 600 and 1200
+        set {timer} to random integer between 600 and 1200
         if {tutorial} is false:
           wait 10 seconds
           broadcast "<blue><bold>==========<white>{Event}<blue>=========="
-          broadcast "- You will now get teleported every couple of minutes"
+          broadcast "- You will now get teleported every few minutes"
           set {tutorial} to true
 
-command uc.e2.info:
+command uc.e2.info():
   permission: op
   trigger:
     send "time untill next teleport: %{timer}%"

@@ -1,6 +1,11 @@
 # Created by Gematron (Gematron studios)
 # given to Missplaced crew member; Present
 
+command uc.version():
+  permission: op
+  trigger:
+    send "V1.1 (Green Ray)"
+
 ### Join and leave system ###
 
 on join:
@@ -52,6 +57,11 @@ on join:
     set {Lives.%uuid of player%} to 0
     send title "" with subtitle "<gray> %{Lives.%uuid of player%}%💖" to player for 2 seconds with fadein 0 second and fade out 1 second
     set player's gamemode to spectator
+  if {Lives.%uuid of player%} = -100: 
+    set player's gamemode to spectator
+    set the player's display name to "<orange>[DEV] %name of player%"
+    set the player's tab list name to "<orange>[DEV] %name of player%"
+    execute console command "/team join DEV %player%"
   if {player.DeathAnnimation.%uuid of player%} is true:
     loop 60 times:
       teleport the player to {respawn%player%}
@@ -308,6 +318,7 @@ on respawn:
     set the maximum health of the player to 10
     kick the player due to "<black>[ 💖 ]<red> You ran out of lives;<white> You can now spectate people; from this point onwards you can not enter the compotition"
     broadcast "<dark gray><bold>[<black>💖<dark gray>] %player% ran out of lives"
+                              
   else if {Lives.%uuid of player%} = 0:
     if {investigation.1} contains uuid of player:
       clear {investigation.1}
@@ -357,28 +368,30 @@ on respawn:
         wait 1 tick
     if {player.LastChance.%uuid of player%} is true:
       kill the player
+                              
   else:
     set {player.DeathAnnimation.%uuid of player%} to true
     set player's gamemode to spectator
     set {respawn%player%} to player's location
     apply invisibility without any particles whilst hiding the potion icon to the player for 2 seconds
-    apply darkness without any particles whilst hiding the potion icon to the player for 5 seconds
-    apply resistance 255 without any particles whilst hiding the potion icon to the player for 7 seconds
+    apply darkness without any particles whilst hiding the potion icon to the player for 7 seconds
+    apply resistance 255 without any particles whilst hiding the potion icon to the player for 10 seconds
     apply mining fatigue 255 without any particles whilst hiding the potion icon to the player for 3 seconds
-    send title "" with subtitle "<red>☠" to player for 2 seconds with fadein 0 second and fade out 1 second
-    execute console command "/ppo %player% add large_smoke pulse"
+    send title "" with subtitle "<red>☠" to player for 4 seconds with fadein 0 second and fade out 2 second
+    loop 40 times:
+      teleport the player to {death%player%}
+      wait 1 tick
+    apply Blindness without any particles whilst hiding the potion icon to the player for 3 seconds
     loop 30 times:
       teleport the player to {death%player%}
       wait 1 tick
-    apply Blindness without any particles whilst hiding the potion icon to the player for 2 seconds
-    loop 10 times:
-      teleport the player to {death%player%}
-      wait 1 tick
     execute console command "/ppo %player% reset"
-    loop 10 times:
+    set player's gamemode to survival
+    apply invisibility without any particles whilst hiding the potion icon to the player for 1 seconds
+    wait 5 tick
+    loop 30 times:
       teleport the player to {respawn%player%}
       wait 1 tick
-    set player's gamemode to survival
     set {player.DeathAnnimation.%uuid of player%} to false
 
 # if player is chaned and disconnecs and reconects; they auto die
@@ -387,6 +400,7 @@ on join:
     set {player.LastChance.%uuid of player%} to false
     kill the player
     set the maximum health of the player to 10
+                              
 ### events ###
 # activating events
 command uc.set.event() <integer>:
@@ -450,16 +464,14 @@ command uc.Start_round():
   permission: op
   trigger:
     send action bar "<yellow> Starting round soon..." to player
-    wait 30 seconds
+    wait 4 seconds
     send title "" with subtitle "<yellow> Sesion Started" to all players for 2 seconds with fadein 0 second and fade out 1 second
     wait 30 seconds
     if {all_hunters} is true:
       make console execute command "uc.all_hunters.start(DNR)"
     else:
       make console execute command "uc.hunters.start(DNR)"
-    wait 60 seconds
-    if {soul_link} is true:
-      send "starting processes"
+    wait 30 seconds
     if {around_the_world} is true:
       make console execute command "uc.around_the_world.start(DNR)"
     if {tasks} is true:
@@ -484,7 +496,7 @@ command uc.end_round():
     set {the_Border} to false
     set {Disasters} to false
     send action bar "<yellow> Compleating final preperations and ending server..." to player
-    wait 30 seconds
+    wait 2 seconds
     if {tasks} is true:
       loop all players:
         send action bar "<white> tasks are gowing to explode soon" to loop-player
@@ -612,7 +624,7 @@ command uc.end_round():
         send title "" with subtitle "<purple>    █ Investigators have lost" to all players for 2 seconds with fadein 0 second and fade out 1 second
         wait 0.25 seconds
         send title "" with subtitle "<purple>█ The Investigators have lost" to all players for 2 seconds with fadein 0 second and fade out 1 second
-    wait 30 seconds
+    wait 10 seconds
     if {all_hunters} is true:
       loop all players:
         if {all_Hunters_list::*} contains uuid of loop-player:
