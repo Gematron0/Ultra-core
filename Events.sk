@@ -267,9 +267,9 @@ command uc.disastors.start(DNR):
                   if y-coordinate of loop-player > 120:
                     damage loop-player by 0.5 hearts
                   if {the_Border} is false:
-                    send action bar "<gray>Dont be to low or to high" to loop-player
+                    send action bar "<gray>Dont be to low or to high, you will sufficate" to loop-player
                   else:
-                    set {current_event_running_in_disaters} to "Dont be to low or to high"
+                    set {current_event_running_in_disaters} to "Dont be to low or to high, you will sufficate"
               else:
                 set {event_mode} to false 
             else:
@@ -277,7 +277,7 @@ command uc.disastors.start(DNR):
         if {disastor} = 5:
           wait 3 seconds
           set {border_mm} to false
-          set {event_time} to a random integer between 120 and 300
+          set {event_time} to a random integer between 15 and 30
           while {event_mode} is true:
             if {event_time} != 0:
               if {Disasters} is true:
@@ -287,9 +287,9 @@ command uc.disastors.start(DNR):
                   if loop-player's gamemode is not spectator:
                     spawn primed tnt 15 blocks above loop-player
                   if {the_Border} is false:
-                    send action bar "<gray>Curfull for the falling explosives" to loop-player
+                    send action bar "<gray>Careful for the falling explosives" to loop-player
                   else:
-                    set {current_event_running_in_disaters} to "Curfull for the falling explosives"
+                    set {current_event_running_in_disaters} to "Careful for the falling explosives"
               else:
                 set {event_mode} to false
             else:
@@ -307,9 +307,9 @@ command uc.disastors.start(DNR):
                 loop all players:
                   apply wind charged 255 without any particles whilst hiding the potion icon to the loop-player for 1 seconds
                   if {the_Border} is false:
-                    send action bar "<gray>kamikaze mode" to loop-player
+                    send action bar "<gray>Death = Explode" to loop-player
                   else:
-                    set {current_event_running_in_disaters} to "kamikaze mode"
+                    set {current_event_running_in_disaters} to "Death = Explode"
               else:
                 set {event_mode} to false
                 set {explosive_death} to false
@@ -425,9 +425,9 @@ command uc.disastors.start(DNR):
                 set {event_time} to {event_time} - 1
                 if {the_Border} is false:
                   loop all players:
-                    send action bar "<gray>you are currently hungry" to loop-player
+                    send action bar "<gray>Dont eat" to loop-player
                 else:
-                  set {current_event_running_in_disaters} to "you are currently hungry"
+                  set {current_event_running_in_disaters} to "Dont eat"
               else:
                 set {event_mode} to false
                 set {food} to false
@@ -437,8 +437,12 @@ command uc.disastors.start(DNR):
 
         set {timer_d} to a random integer between 300 and 600
         set {disastor} to a random integer between 1 and 10
-
-
+        if {tutorial} is false:
+          wait 10 seconds
+          broadcast "<blue><bold>==========<white>{Event}<blue>=========="
+          broadcast "- Random disasters will be happeining randomly"
+          set {tutorial} to true
+        
 
 on death:
   if {explosive_death} is true:
@@ -456,6 +460,11 @@ command uc.e3.info:
     send "timer untill disaster: %{timer_d}%"
     send "timer during disaster: %{event_time}%"
     send "next disaster: %{disastor}%"
+
+command uc.e3.nextevent <integer>:
+  permission: op
+  trigger:
+    set {disastor} to arg-1
 
 # tasks
 command uc.tasks.start(DNR):
