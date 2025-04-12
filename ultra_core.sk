@@ -4,7 +4,7 @@
 command uc.version():
   permission: op
   trigger:
-    send "V1.4 (Tornado)"
+    send "V1.6 (3AM)"
 
 ### Join and leave system ###
 

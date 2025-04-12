@@ -474,7 +474,7 @@ command uc.tasks.start(DNR):
       send action bar "<green> Pipe bomb being sent to evey user" to loop-player
     wait 1 second
     clear {compleated::*}
-    set {tasks::*} to 1,2,3,4,5,6,7,8,9 and 10
+    set {tasks::*} to 1,2,3,4,5,6,7,8,9,10,11,12,13 and 14
     if {the_Border} is false:
       loop all players:
         set {_randomIndex} to a random integer between 1 and size of {tasks::*}
@@ -497,6 +497,14 @@ command uc.tasks.start(DNR):
         if {_randomIndex} = 9:
           give loop-player 1 paper named "You can't attack anyone this session"
         if {_randomIndex} = 10:
+          give loop-player 1 paper named "Get Caves and Cliffs Advancement"
+        if {_randomIndex} = 11:
+          give loop-player 1 paper named "If the Hunter Fails this session, so do you."
+        if {_randomIndex} = 12:
+          give loop-player 1 paper named "You are a hunter, task done once you killed a person"
+        if {_randomIndex} = 13:
+          give loop-player 1 paper named "If shadow doesn't die this session you fail"
+        if {_randomIndex} = 14:
           give loop-player 1 paper named "Get Caves and Cliffs Advancement"
     else:
       loop all players:
@@ -530,7 +538,7 @@ command uc.tasks.start(DNR):
     broadcast "- (if you did not recive a pipe bomb; run command /uc.newTask() to recive a task)"
 command uc.newTask():
   trigger:
-    set {tasks::*} to 1,2,3,4,5,6,7,8,9 and 10
+    set {tasks::*} to 1,2,3,4,5,6,7,8,9,10,11,12,13 and 14
     if {the_Border} is false:
       set {_randomIndex} to a random integer between 1 and size of {tasks::*}
       if {_randomIndex} = 1:
@@ -552,6 +560,14 @@ command uc.newTask():
       if {_randomIndex} = 9:
         give player 1 paper named "You can't attack anyone this session"
       if {_randomIndex} = 10:
+        give player 1 paper named "Get Caves and Cliffs Advancement"
+      if {_randomIndex} = 11:
+        give player 1 paper named "If the Hunter Fails this session, so do you."
+      if {_randomIndex} = 12:
+        give player 1 paper named "You are a hunter, task done once you killed a person"
+      if {_randomIndex} = 13:
+        give player 1 paper named "If shadow doesn't die this session you fail"
+      if {_randomIndex} = 14:
         give player 1 paper named "Get Caves and Cliffs Advancement"
     else:
       set {_randomIndex} to a random integer between 1 and size of {tasks::*}
@@ -576,7 +592,7 @@ command uc.newTask():
       if {_randomIndex} = 10:
         give player 1 paper named "kill 3 people"
 on right click:
-  if event-item is a paper named "convince someone to eat a pufferfish without bribing them","Stay within earshot/viewing distance of someone for 10 minutes without them knowing","give someone an item of importance and make up a story on why you now hate said item (3 min long story)","Build a rollercoaster spaning 200 blocks","You must keep jmillar alive for the entire session If he dies you fail","Get 6 advancements","Steal a crafting table from 5 peoples bases","Call people anything but their username for the entire session","You can't attack anyone this session", or "Get Caves and Cliffs Advancement":
+  if event-item is a paper named "You must kill someone who killed you. If no one killed you just kill someone","If shadow doesn't die this session you fail","You are a hunter, task done once you killed a person","If the Hunter Fails this session, so do you.","convince someone to eat a pufferfish without bribing them","Stay within earshot/viewing distance of someone for 10 minutes without them knowing","give someone an item of importance and make up a story on why you now hate said item (3 min long story)","Build a rollercoaster spaning 200 blocks","You must keep jmillar alive for the entire session If he dies you fail","Get 6 advancements","Steal a crafting table from 5 peoples bases","Call people anything but their username for the entire session","You can't attack anyone this session", or "Get Caves and Cliffs Advancement":
     remove event-item from the player's inventory
     add uuid of player to {compleated::*}
     send action bar "<green> Task compleated" to player
