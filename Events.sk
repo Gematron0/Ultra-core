@@ -602,6 +602,25 @@ on right click:
     send action bar "<green> Task compleated" to player
     play 1000 totem with offset of 1, 1, 0 and speed 0.3 at location of player
     give event-player 1 iron block
+
+command uc.e4.compleattask <player>:
+  permission: op
+  trigger:
+    add uuid of arg-1 to {compleated::*}
+    send action bar "<green> Task compleated" to arg-1
+    play 1000 totem with offset of 1, 1, 0 and speed 0.3 at location of arg-1
+
+command uc.e4.addattask <player>:
+  permission: op
+  trigger:
+    remove uuid of arg-1 from {compleated::*}
+
+command uc.e4.print:
+  permission: op
+  trigger:
+    send "%{compleated::*}%"
+
+
 # world boss
 command uc.world_boss.start(DNR):
   permission: op
