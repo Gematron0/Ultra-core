@@ -2668,7 +2668,7 @@ on death of player:
 command uc.manual_border() <integer>:
   permission: op
   trigger:
-    set {border_mm} to true
+    set {border_mm} to true 
     send action bar "<yellow>[⚠] WORLD BORDER SHRINKING" to all players
     wait 3 seconds
     set {border_mm} to false
