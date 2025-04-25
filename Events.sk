@@ -613,7 +613,7 @@ command uc.e4.compleattask <player>:
 command uc.e4.addattask <player>:
   permission: op
   trigger:
-    remove uuid of arg-1 from {compleated::*}
+    remove arg-1 from {compleated::*}
 
 command uc.e4.print:
   permission: op
@@ -661,27 +661,6 @@ command uc.world_boss.start(DNR):
         loop all players:
           if {current_worldboss} does not contain uuid of loop-players:
             apply strength to the player for 1 second
-      if {current_worldboss} is not set:
-        wait 20 seconds
-        clear {Worldboss_uuids::*}
-        loop all players:
-          if loop-player's gamemode is not spectator:
-            add loop-player's uuid to {Worldboss_uuids::*}
-        set {_randomIndex} to a random integer between 1 and size of {Worldboss_uuids::*}
-        loop 20 times:
-          set {_randomIndex} to a random integer between 1 and size of {Worldboss_uuids::*}
-        set {current_worldboss} to {Worldboss_uuids::%{_randomIndex}%}
-        set {_player} to ({current_worldboss} parsed as offline player)
-        send title "" with subtitle "<red>░░░ ░░░ ░░░ ░░░░░ ░░░░" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
-        wait 0.25 seconds
-        send title "" with subtitle "<red>y░░ a░░ t░░ W░░l░ ░o░░" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
-        wait 0.25 seconds
-        send title "" with subtitle "<red>yo░ ar░ th░ Wo░ld ░os░" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
-        wait 0.25 seconds
-        send title "" with subtitle "<red>you are the World Boss" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
-        set {timer_s} to 0
-        set {timer_m} to 0
-        wait 10 seconds
       if {the_Border} is true:
         set {_player} to ({current_worldboss} parsed as offline player)
         loop all players:
@@ -709,9 +688,9 @@ command uc.world_boss.start(DNR):
       if {timer_s} is equal to 59:
         add 1 to {timer_m}
         set {timer_s} to -1
-        if {timer_m} is equal to 1:
+        if {timer_m} is equal to 10:
           set {worldBoss::L1} to true
-        if {timer_m} is equal to 2:
+        if {timer_m} is equal to 20:
           if {tutorial} is false:
             set {tutorial} to true
             set {worldBoss::L2} to true
@@ -720,13 +699,13 @@ command uc.world_boss.start(DNR):
             broadcast "- Kill the world boss, and you will become the world boss instead"
             broadcast "- If you live and stay a world boss until the session ends, you will gain a reward"
             broadcast "- Every 5 minutes, after the first 10 minutes, the world boss will reveal something about the current location"
-        if {timer_m} is equal to 3:
+        if {timer_m} is equal to 15:
           set {worldBoss::L3} to true
-        if {timer_m} is equal to 4:
+        if {timer_m} is equal to 25:
           set {worldBoss::L4} to true
-        if {timer_m} is equal to 5:
+        if {timer_m} is equal to 30:
           set {worldBoss::L5} to true
-        if {timer_m} is equal to 6:
+        if {timer_m} is equal to 35:
           set {worldBoss::L6} to true
         if {worldBoss::L6} is true:
           loop all players:
@@ -768,7 +747,7 @@ on death:
             send "<red><bold>==========<white>{Private Information}<red>==========" to attacker
             send "- This piece of information only you would know; it is recommended to keep this a secret from other people" to attacker
             send "- You are the world boss; no one knows that you are the world boss currently" to attacker
-            send "- Every 5 minutes, after the first 10 minutes, you will reveal something about yourself to the server" to attacker
+            send "- Every 5 minutes, after the first 10 minutes,(10,15,20,25,30,35 min) you will reveal something about yourself to the server" to attacker
             send "- If a player kills you, you are no longer the world boss, and the attacker will become the world boss instead" to attacker
             send "- Live and stay the world boss until the session ends to gain a reward" to attacker
             wait 30 seconds
@@ -777,6 +756,61 @@ on death:
             broadcast "- Kill the world boss, and you will become the world boss instead"
             broadcast "- If you live and stay a world boss until the session ends, you will gain a reward"
             broadcast "- Every 5 minutes, after the first 10 minutes, the world boss will reveal something about the current location"
+
+command uc.e5.print:
+  permission: op
+  trigger:
+    send "%{current_worldboss}%" to player
+    set {_player} to ({current_worldboss} parsed as offline player)
+    send "%{_player}%" to player
+    send "%{timer_m}%:%{timer_s}%" to player
+    send "Tutorial played: %{tutorial}%"
+    send "10 min event: %{worldBoss::L1}%"
+    send "15 min event: %{worldBoss::L3}%"
+    send "20 min event: %{worldBoss::L2}%"
+    send "25 min event: %{worldBoss::L4}% (will be false as 1 time event)"
+    send "30 min event: %{worldBoss::L5}%"
+    send "35 min event: %{worldBoss::L6}%"
+
+command uc.e5.change_world_boss <player>:
+  permission: op
+  trigger:
+    set {worldBoss::L6} to false
+    set {worldBoss::L5} to false
+    set {worldBoss::L4} to false
+    set {worldBoss::L3} to false
+    set {worldBoss::L2} to false
+    set {worldBoss::L1} to false
+    set {_player} to ({current_worldboss} parsed as offline player)
+    execute console command "/ppo %{_player}% reset %{_player}%"
+    set {current_worldboss} to uuid of arg-1
+    set {_player} to ({current_worldboss} parsed as offline player)
+    set {timer_s} to 0
+    set {timer_m} to 0
+    send title "" with subtitle "<red>░░░ ░░░ ░░░ ░░░░░ ░░░░" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<red>y░░ a░░ t░░ w░░l░ ░o░░" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<red>yo░ ar░ th░ wo░ld ░os░" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    wait 0.25 seconds
+    send title "" with subtitle "<red>you are the world boss" to {_player} for 2 seconds with fadein 0 second and fade out 1 second
+    wait 1 seconds
+    if {tutorial} is false:
+      set {tutorial} to true
+      wait 10 seconds
+      send "<red><bold>==========<white>{Private Information}<red>==========" to {current_worldboss}
+      send "- This piece of information only you would know; it is recommended to keep this a secret from other people" to {current_worldboss}
+      send "- You are the world boss; no one knows that you are the world boss currently" to {current_worldboss}
+      send "- Every 5 minutes, after the first 10 minutes (10,15,20,25,30,35 min), you will reveal something about yourself to the server" to {current_worldboss}
+      send "- If a player kills you, you are no longer the world boss, and the attacker will become the world boss instead" to {current_worldboss}
+      send "- Live and stay the world boss until the session ends to gain a reward" to {current_worldboss}
+      wait 30 seconds
+      broadcast "<blue><bold>==========<white>{Event}<blue>=========="
+      broadcast "- There is a world boss among you guys"
+      broadcast "- Kill the world boss, and you will become the world boss instead"
+      broadcast "- If you live and stay a world boss until the session ends, you will gain a reward"
+      broadcast "- Every 5 minutes, after the first 10 minutes (10,15,20,25,30,35 min), the world boss will reveal something about the current location"
+
 # the investigation
 command uc.investigation(DNR):
   permission: op

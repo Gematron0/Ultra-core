@@ -4,7 +4,7 @@
 command uc.version():
   permission: op
   trigger:
-    send "V1.7 (-1 min lol)"
+    send "V1.9 (Hardend Lazer)"
 
 ### Join and leave system ###
 
