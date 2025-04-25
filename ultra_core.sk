@@ -4,7 +4,7 @@
 command uc.version():
   permission: op
   trigger:
-    send "V1.9 (Hardend Lazer)"
+    send "V2.0 (BIG CHANGE)"
 
 ### Join and leave system ###
 
@@ -434,6 +434,7 @@ command uc.set.event() <integer>:
     set {the_horde} to false
     set {tutorial} to false
     set {the_Border} to false
+    set {helth_regen} to false
     if arg-1 is equal to 0:
       send action bar "All events reset" to player
     if arg-1 is equal to 3:
@@ -453,6 +454,7 @@ command uc.set.event() <integer>:
       send action bar "<red>Worldboss" to player
     if arg-1 is equal to 6:
       set {investigation} to true
+      set {helth_regen} to true
       send action bar "<purple>Investigation" to player
     if arg-1 is equal to 7:
       set {the_horde} to true
@@ -476,6 +478,7 @@ command uc.event.info():
     send "[🏷the the_horde][💫 %{the_horde}%]"
     send "[🏷investigation][💫 %{investigation}%]"
     send "[🏷the Borde][💫 %{the_Border}%]"
+    send "[🏷helth regen][💫 %{helth_regen}%]"
     send "<green>[========================]"
                               
 # start the round
@@ -506,6 +509,10 @@ command uc.Start_round():
       make console execute command "uc.border(DNR)"
     if {Disasters} is true:
       make console execute command "uc.disastors.start(DNR)"
+    if {helth_regen} is true:
+      wait 10 seconds
+      broadcast "<blue><bold>==========<white>{Event}<blue>=========="
+      broadcast "- players with a high ammout of lives will not be able to regenerate helth"
                               
 # end the round
 command uc.end_round():
