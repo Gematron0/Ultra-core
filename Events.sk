@@ -1,15 +1,9 @@
 ### event ###
 # high lives health
 on heal:
-  {Lives.%uuid of player%} = 10 or 9 or 8 or 7 or 6:
+  {Lives.%uuid of player%} = 10 or 9 or 8:
     if {helth_regen} is true:
       Cancel Event
-
-command uc.temp:
-  permission: op
-  trigger:
-    set {helth_regen} to true
-  
 # hunters
 command uc.hunters.start(DNR):
   permission: op
@@ -193,6 +187,8 @@ command uc.disastors.start(DNR):
   permission: op
   trigger:
     set {timer_d} to 600
+    if {the_Border} is true:
+      set {timer_d} to 200
     set {disastor} to a random integer between 1 and 10
     while {Disasters} is true:
       wait 1 second
@@ -204,7 +200,8 @@ command uc.disastors.start(DNR):
         if {disastor} = 1:
           wait 3 seconds
           set {border_mm} to false
-          set {event_time} to a random integer between 120 and 300
+          if {the_Border} is true:
+            set {event_time} to a random integer between 60 and 120
           while {event_mode} is true:
             if {event_time} != 0:
               if {Disasters} is true:
@@ -212,7 +209,7 @@ command uc.disastors.start(DNR):
                 set {event_time} to {event_time} - 1
                 loop all players:
                   if block below the loop-player is Stone or Grass Block:
-                    damage loop-player by 0.5 hearts
+                    damage loop-player by 3 hearts
                   if {the_Border} is false:
                     send action bar "<gray>Grass and Stone will make you take damage" to loop-player
                   else:
@@ -225,26 +222,31 @@ command uc.disastors.start(DNR):
           wait 3 seconds
           set {border_mm} to false
           set {event_time} to a random integer between 120 and 300
+          if {the_Border} is true:
+            set {event_time} to a random integer between 60 and 120
           while {event_mode} is true:
+            set {food} to true
             if {event_time} != 0:
               if {Disasters} is true:
                 wait 1 second
                 set {event_time} to {event_time} - 1
-                loop all players:
-                  if sunlight level at the loop-player is greater than 10:
-                    damage loop-player by 0.5 hearts
-                  if {the_Border} is false:
-                    send action bar "<gray>The sunlight will burn you" to loop-player
-                  else:
-                    set {current_event_running_in_disaters} to "The sunlight will burn you"
+                if {the_Border} is false:
+                  loop all players:
+                    send action bar "<gray>Dont eat" to loop-player
+                else:
+                  set {current_event_running_in_disaters} to "Dont eat"
               else:
-                set {event_mode} to false 
+                set {event_mode} to false
+                set {food} to false
             else:
               set {event_mode} to false
+              set {food} to false
         if {disastor} = 3:
           wait 3 seconds
           set {border_mm} to false
           set {event_time} to a random integer between 120 and 300
+          if {the_Border} is true:
+            set {event_time} to a random integer between 60 and 120
           while {event_mode} is true:
             if {event_time} != 0:
               if {Disasters} is true:
@@ -268,6 +270,8 @@ command uc.disastors.start(DNR):
           wait 3 seconds
           set {border_mm} to false
           set {event_time} to a random integer between 120 and 300
+          if {the_Border} is true:
+            set {event_time} to a random integer between 60 and 120
           while {event_mode} is true:
             if {event_time} != 0:
               if {Disasters} is true:
@@ -290,6 +294,8 @@ command uc.disastors.start(DNR):
           wait 3 seconds
           set {border_mm} to false
           set {event_time} to a random integer between 15 and 30
+          if {the_Border} is true:
+            set {event_time} to a random integer between 10 and 20
           while {event_mode} is true:
             if {event_time} != 0:
               if {Disasters} is true:
@@ -310,6 +316,8 @@ command uc.disastors.start(DNR):
           wait 3 seconds
           set {border_mm} to false
           set {event_time} to a random integer between 120 and 300
+          if {the_Border} is true:
+            set {event_time} to a random integer between 60 and 120
           while {event_mode} is true:
             if {event_time} != 0:
               if {Disasters} is true:
@@ -332,6 +340,8 @@ command uc.disastors.start(DNR):
           wait 3 seconds
           set {border_mm} to false
           set {event_time} to a random integer between 120 and 300
+          if {the_Border} is true:
+            set {event_time} to a random integer between 60 and 120
           while {event_mode} is true:
             if {event_time} != 0:
               if {Disasters} is true:
@@ -353,6 +363,8 @@ command uc.disastors.start(DNR):
           wait 3 seconds
           set {border_mm} to false
           set {event_time} to a random integer between 2 and 7
+          if {the_Border} is true:
+            set {event_time} to a random integer between 1 and 3
           while {event_mode} is true:
             if {event_time} != 0:
               if {Disasters} is true:
@@ -406,6 +418,8 @@ command uc.disastors.start(DNR):
           wait 3 seconds
           set {border_mm} to false
           set {event_time} to a random integer between 20 and 70
+          if {the_Border} is true:
+            set {event_time} to a random integer between 10 and 40
           while {event_mode} is true:
             if {event_time} != 0:
               if {Disasters} is true:
@@ -429,6 +443,8 @@ command uc.disastors.start(DNR):
           wait 3 seconds
           set {border_mm} to false
           set {event_time} to a random integer between 120 and 300
+          if {the_Border} is true:
+            set {event_time} to a random integer between 60 and 120
           while {event_mode} is true:
             set {food} to true
             if {event_time} != 0:
@@ -449,6 +465,8 @@ command uc.disastors.start(DNR):
 
         set {timer_d} to a random integer between 300 and 600
         set {disastor} to a random integer between 1 and 10
+        if {the_Border} is true:
+          set {timer_d} to a random integer between 60 and 300
         if {tutorial} is false:
           wait 10 seconds
           broadcast "<blue><bold>==========<white>{Event}<blue>=========="
@@ -548,6 +566,8 @@ command uc.tasks.start(DNR):
     broadcast "- if you do not compleat the pipe bomb in your inventory; at the end of the section you will die"
     broadcast "- (once you compleated the pipe bomb; spam right click while holding the pipe bomb untill it dissapears)"
     broadcast "- (if you did not recive a pipe bomb; run command /uc.newTask() to recive a task)"
+    if {the_Border} is true:
+      broadcast "- you wont die if you fail your task, you just just a reward"
 command uc.newTask():
   trigger:
     set {tasks::*} to 1,2,3,4,5,6,7,8,9,10,11,12,13 and 14
@@ -584,11 +604,11 @@ command uc.newTask():
     else:
       set {_randomIndex} to a random integer between 1 and size of {tasks::*}
       if {_randomIndex} = 1:
-        give player 1 paper named "convince someone to eat a pufferfish without bribing them"
+        give player 1 paper named "convince someone to eat a pufferfish without bribing them "
       if {_randomIndex} = 2:
-        give player 1 paper named "kill a close member to you"
+        give player 1 paper named "gain any achivment"
       if {_randomIndex} = 3:
-        give player 1 paper named "dont say anything for 10 min"
+        give player 1 paper named "only sing for 10 min"
       if {_randomIndex} = 4:
         give player 1 paper named "Kill a player"
       if {_randomIndex} = 5:
@@ -602,18 +622,26 @@ command uc.newTask():
       if {_randomIndex} = 9:
         give player 1 paper named "kill 2 people"
       if {_randomIndex} = 10:
-        give player 1 paper named "kill 3 people"
+        give player 1 paper named "Steal a crafting table from 3 peoples bases"
+      if {_randomIndex} = 11:
+        give player 1 paper named "Steal a door from 3 peoples bases"
+      if {_randomIndex} = 12:
+        give player 1 paper named "eat a pufferfish"
+      if {_randomIndex} = 13:
+        give player 1 paper named "fly/fall for 10 seconds"
+      if {_randomIndex} = 14:
+        give player 1 paper named "Steal a bed from 2 peoples bases"
 on right click:
   if event-item is a paper named "You must kill someone who killed you. If no one killed you just kill someone","If shadow doesn't die this session you fail","You are a hunter, task done once you killed a person","If the Hunter Fails this session, so do you.","convince someone to eat a pufferfish without bribing them","Stay within earshot/viewing distance of someone for 10 minutes without them knowing","give someone an item of importance and make up a story on why you now hate said item (3 min long story)","Build a rollercoaster spaning 200 blocks","You must keep jmillar alive for the entire session If he dies you fail","Get 6 advancements","Steal a crafting table from 5 peoples bases","Call people anything but their username for the entire session","You can't attack anyone this session", or "Get Caves and Cliffs Advancement":
     remove event-item from the player's inventory
     add uuid of player to {compleated::*}
     send action bar "<green> Task compleated" to player
     play 1000 totem with offset of 1, 1, 0 and speed 0.3 at location of player
-  else if event-item is a paper named "convince someone to eat a pufferfish without bribing them","kill a close member to you","dont say anything for 10 min","Kill a player","gain any achivment","fly/fall for 10 seconds","be on 1/2 a heart for 12 seconds","Steal a crafting table from 3 peoples bases","Steal a crafting table from 3 peoples bases","kill 2 people", or "kill 3 people":
+  else if event-item is a paper named "convince someone to eat a pufferfish without bribing them ","gain any achivment","only sing for 10 min","Kill a player","gain any achivment","fly/fall for 10 seconds","be on 1/2 a heart for 12 seconds","Steal a crafting table from 3 peoples bases","kill 2 people","Steal a door from 3 peoples bases","eat a pufferfish","Steal a bed from 2 peoples bases" or "kill 3 people":
     remove event-item from the player's inventory
     send action bar "<green> Task compleated" to player
     play 1000 totem with offset of 1, 1, 0 and speed 0.3 at location of player
-    give event-player 1 iron block
+    give event-player 1 diamond block
 
 command uc.e4.compleattask <player>:
   permission: op
@@ -663,6 +691,8 @@ command uc.world_boss.start(DNR):
     send "- If a player kills you, you are no longer the world boss, and the attacker will become the world boss instead" to {_player}
     send "- Live and stay the world boss until the session ends to gain a reward" to {_player}
     send "- Note for the first world boss: The activity will become publicly known after your death or 20 minutes from now" to {_player}
+    if {the_Border} is true:
+      send "- world boss will now gain streanth" to {_player}
     while {worldboss} is true:
       add 1 to {timer_s}
       wait 1 second
@@ -1116,249 +1146,57 @@ command uc.e7.print:
 command uc.border(DNR):
   permission: op
   trigger:
-    send action bar "<yellow>[⚠] ????? ?????? ?????????" to all players
     wait 2 seconds
-    set {border_distance} to 50
+    set {border_distance} to 550
     set {border_current_distance} to 550
     set {border_deaths} to 0
-    set {members} to 0
-    loop all players:
-      if loop-player's gamemode is not spectator:
-        if {Lives.%uuid of loop-player%} = 10: 
-          set {border_distance} to {border_distance} + 50
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 9:
-          set {border_distance} to {border_distance} + 45
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 8: 
-          set {border_distance} to {border_distance} + 40
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 7: 
-          set {border_distance} to {border_distance} + 35
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 6: 
-          set {border_distance} to {border_distance} + 30
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 5: 
-          set {border_distance} to {border_distance} + 25
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 4: 
-          set {border_distance} to {border_distance} + 20
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 3: 
-          set {border_distance} to {border_distance} + 15
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 2: 
-          set {border_distance} to {border_distance} + 10
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 1: 
-          set {border_distance} to {border_distance} + 5
-          set {members} to {members} + 1
-      if {player.DeathAnnimation.%uuid of loop-player%} is true:
-        if {Lives.%uuid of loop-player%} = 10: 
-          set {border_distance} to {border_distance} + 50
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 9:
-          set {border_distance} to {border_distance} + 45
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 8: 
-          set {border_distance} to {border_distance} + 40
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 7: 
-          set {border_distance} to {border_distance} + 35
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 6: 
-          set {border_distance} to {border_distance} + 30
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 5: 
-          set {border_distance} to {border_distance} + 25
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 4: 
-          set {border_distance} to {border_distance} + 20
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 3: 
-          set {border_distance} to {border_distance} + 15
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 2: 
-          set {border_distance} to {border_distance} + 10
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 1: 
-          set {border_distance} to {border_distance} + 5
-          set {members} to {members} + 1
-        if {border_current_distance} >= {border_distance}:
-          set {border_current_distance} to 550
-    set {border_mm} to false
-    set {members_cound_excides} to true
-    set {current_event_running_in_disaters} to ""
-    while {the_Border} is true:
-      wait 2 seconds
-      wait 1 tick
-      set {tutorial} to true
-      if {border_mm} is false:
-        send action bar "<yellow>█%{border_current_distance}%/%{border_distance}%█ <grey>%{current_event_running_in_disaters}%" to all players
-        set {_player} to ({current_worldboss} parsed as offline player)
-        send action bar "<yellow>█%{border_current_distance}%/%{border_distance}%█ <red>░░░[%{timer_m}%:%{timer_s}%]░░░ <grey>%{current_event_running_in_disaters}%" to {_player}
+    set {the_borderrrr} to true
+    while {the_borderrrr} is true:
+      wait 2 second
+      loop all players:
+        if {border_mm} is false:
+          send action bar "<yellow>█%{border_current_distance}%/%{border_distance}%█ <grey>%{current_event_running_in_disaters}%" to all players
+          set {_player} to ({current_worldboss} parsed as offline player)
+          send action bar "<yellow>█%{border_current_distance}%/%{border_distance}%█ <red>░░░[%{timer_m}%:%{timer_s}%]░░░ <grey>%{current_event_running_in_disaters}%" to {_player}
       if {border_current_distance} > {border_distance}:
         make console execute command "/worldborder add -1 2"
         set {border_current_distance} to {border_current_distance} - 1
-        if {members_cound_excides} is true:
-          if {members} <= 4:
-            set {members_cound_excides} to false
-            set {border_deaths} to 6
-            set {around_the_world} to false
-            set {tasks} to false
-            set {worldboss} to false
-            set {the_horde} to false
-            set {Disasters} to false
-            set {all_hunters} to false
-            loop all players:
-              if {all_Hunters_list::*} contains uuid of loop-player:
-                send action bar "<red> Contract failed" to loop-player
-            wait 2 seconds
-            loop all players:
-              if {all_Hunters_list::*} contains uuid of loop-player:
-                send action bar "<red> exacution in [10s]" to loop-player
-                execute console command "/ppo %loop-player% add dust beam red"
-            wait 1 second
-            loop all players:
-              if {all_Hunters_list::*} contains uuid of loop-player:
-                send action bar "<red> exacution in [09s]" to loop-player
-            wait 1 second
-            loop all players:
-              if {all_Hunters_list::*} contains uuid of loop-player:
-                send action bar "<red> exacution in [08s]" to loop-player
-            wait 1 second
-            loop all players:
-              if {all_Hunters_list::*} contains uuid of loop-player:
-                send action bar "<red> exacution in [07s]" to loop-player
-            wait 1 second
-            loop all players:
-              if {all_Hunters_list::*} contains uuid of loop-player:
-                send action bar "<red> exacution in [06s]" to loop-player
-            wait 1 second
-            loop all players:
-              if {all_Hunters_list::*} contains uuid of loop-player:
-                send action bar "<red> exacution in [05s]" to loop-player
-            wait 1 second
-            loop all players:
-              if {all_Hunters_list::*} contains uuid of loop-player:
-                send action bar "<red> exacution in [04s]" to loop-player
-            wait 1 second
-            loop all players:
-              if {all_Hunters_list::*} contains uuid of loop-player:
-                send action bar "<red> exacution in [03s]" to loop-player
-            wait 1 second
-            loop all players:
-              if {all_Hunters_list::*} contains uuid of loop-player:
-                send action bar "<red> exacution in [02s]" to loop-player
-            wait 1 second
-            loop all players:
-              if {all_Hunters_list::*} contains uuid of loop-player:
-                send action bar "<red> exacution in [01s]" to loop-player
-            wait 1 second
-            loop all players:
-              if {all_Hunters_list::*} contains uuid of loop-player:
-                send action bar "<red> exacution in [00s]" to loop-player
-                play 600 flame with offset of 1, 1, 1 and speed 0.1 at location of player
-                execute console command "/ppo %loop-player% reset"
-                kill loop-player
-on death of player:
-  if {the_Border} is true:
-    wait 3 seconds
+
+command uc.e8.addevent_andborder() <integer>:
+  permission: op
+  trigger:
     set {border_mm} to true
     set {border_deaths} to {border_deaths} + 1
     if {border_deaths} = 1:
-      send action bar "<yellow>[⚠] ????D ????E? ???I????G" to all players
+      send action bar "<yellow>[⚠] ????? ?????? ?????????" to all players
       set {around_the_world} to true
       wait 3 seconds
       make console execute command "uc.around_the_world.start(DNR)"
     else if {border_deaths} = 2:
-      send action bar "<yellow>[⚠] W???? B???E? S?????IN?" to all players
+      send action bar "<yellow>[⚠] ????D ????E? ???I????G" to all players
       set {tasks} to true
       wait 3 seconds
       make console execute command "uc.tasks.start(DNR)"
     else if {border_deaths} = 3:
-      send action bar "<yellow>[⚠] WO??? BO???R SHR???I??" to all players
+      send action bar "<yellow>[⚠] W???? B???E? S?????IN?" to all players
       set {worldboss} to true
       wait 3 seconds
       make console execute command "uc.world_boss.start(DNR)"
     else if {border_deaths} = 4:
-      send action bar "<yellow>[⚠] WO?LD BO?DE? SH??NKI?G" to all players
+      send action bar "<yellow>[⚠] WO??? BO???R SHR???I??" to all players
       set {Disasters} to true
       wait 3 seconds
       make console execute command "uc.disastors.start(dnr)"
     else if {border_deaths} = 5:
-      send action bar "<yellow>[⚠] WORLD BORDER SHRINKING" to all players
+      send action bar "<yellow>[⚠] WO?LD BO?DE? SH??NKI?G" to all players
     else:
       send action bar "<yellow>[⚠] WORLD BORDER SHRINKING" to all players
-    wait 3 seconds
+      wait 3 seconds
     set {border_mm} to false
-    set {border_distance} to 50
-    set {members} to 0
-    loop all players:
-      if loop-player's gamemode is not spectator:
-        if {Lives.%uuid of loop-player%} = 10: 
-          set {border_distance} to {border_distance} + 50
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 9:
-          set {border_distance} to {border_distance} + 45
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 8: 
-          set {border_distance} to {border_distance} + 40
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 7: 
-          set {border_distance} to {border_distance} + 35
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 6: 
-          set {border_distance} to {border_distance} + 30
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 5: 
-          set {border_distance} to {border_distance} + 25
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 4: 
-          set {border_distance} to {border_distance} + 20
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 3: 
-          set {border_distance} to {border_distance} + 15
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 2: 
-          set {border_distance} to {border_distance} + 10
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 1: 
-          set {border_distance} to {border_distance} + 5
-          set {members} to {members} + 1
-      if {player.DeathAnnimation.%uuid of loop-player%} is true:
-        if {Lives.%uuid of loop-player%} = 10: 
-          set {border_distance} to {border_distance} + 50
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 9:
-          set {border_distance} to {border_distance} + 45
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 8: 
-          set {border_distance} to {border_distance} + 40
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 7: 
-          set {border_distance} to {border_distance} + 35
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 6: 
-          set {border_distance} to {border_distance} + 30
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 5: 
-          set {border_distance} to {border_distance} + 25
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 4: 
-          set {border_distance} to {border_distance} + 20
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 3: 
-          set {border_distance} to {border_distance} + 15
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 2: 
-          set {border_distance} to {border_distance} + 10
-          set {members} to {members} + 1
-        if {Lives.%uuid of loop-player%} = 1: 
-          set {border_distance} to {border_distance} + 5
-          set {members} to {members} + 1
-command uc.manual_border() <integer>:
+    set {border_distance} to arg-1
+
+
+command uc.e8.manual_border() <integer>:
   permission: op
   trigger:
     set {border_mm} to true
@@ -1366,3 +1204,65 @@ command uc.manual_border() <integer>:
     wait 3 seconds
     set {border_mm} to false
     set {border_distance} to arg-1
+
+command uc.e8.end_events_and_hunter():
+  permission: op
+  trigger:
+    set {around_the_world} to false
+    set {tasks} to false
+    set {worldboss} to false
+    set {the_horde} to false
+    set {Disasters} to false
+    set {all_hunters} to false
+    loop all players:
+      if {all_Hunters_list::*} contains uuid of loop-player:
+        send action bar "<red> Contract failed" to loop-player
+    wait 2 seconds
+    loop all players:
+      if {all_Hunters_list::*} contains uuid of loop-player:
+        send action bar "<red> exacution in [10s]" to loop-player
+        execute console command "/ppo %loop-player% add dust beam red"
+    wait 1 second
+    loop all players:
+      if {all_Hunters_list::*} contains uuid of loop-player:
+        send action bar "<red> exacution in [09s]" to loop-player
+    wait 1 second
+    loop all players:
+      if {all_Hunters_list::*} contains uuid of loop-player:
+        send action bar "<red> exacution in [08s]" to loop-player
+    wait 1 second
+    loop all players:
+      if {all_Hunters_list::*} contains uuid of loop-player:
+        send action bar "<red> exacution in [07s]" to loop-player
+    wait 1 second
+    loop all players:
+      if {all_Hunters_list::*} contains uuid of loop-player:
+        send action bar "<red> exacution in [06s]" to loop-player
+    wait 1 second
+    loop all players:
+      if {all_Hunters_list::*} contains uuid of loop-player:
+        send action bar "<red> exacution in [05s]" to loop-player
+    wait 1 second
+    loop all players:
+      if {all_Hunters_list::*} contains uuid of loop-player:
+        send action bar "<red> exacution in [04s]" to loop-player
+    wait 1 second
+    loop all players:
+      if {all_Hunters_list::*} contains uuid of loop-player:
+        send action bar "<red> exacution in [03s]" to loop-player
+    wait 1 second
+    loop all players:
+      if {all_Hunters_list::*} contains uuid of loop-player:
+        send action bar "<red> exacution in [02s]" to loop-player
+    wait 1 second
+    loop all players:
+      if {all_Hunters_list::*} contains uuid of loop-player:
+        send action bar "<red> exacution in [01s]" to loop-player
+    wait 1 second
+    loop all players:
+      if {all_Hunters_list::*} contains uuid of loop-player:
+        if loop-player's gamemode is not spectator:
+          send action bar "<red> exacution in [00s]" to loop-player
+          play 600 flame with offset of 1, 1, 1 and speed 0.1 at location of player
+          execute console command "/ppo %loop-player% reset"
+          kill loop-player

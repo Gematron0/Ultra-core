@@ -4,7 +4,7 @@
 command uc.version():
   permission: op
   trigger:
-    send "V2.3 (one varable changed)"
+    send "V2.3 (Border Overhall)"
 
 ### Join and leave system ###
 
@@ -270,6 +270,15 @@ on death:
 # respawn animation
 on respawn:
   wait 0.1 seconds
+  if {Lives.%uuid of player%} = -10 or -11:
+    set {Lives.%uuid of player%} to 0
+    set the player's display name to "<gray>[💖 %{Lives.%uuid of player%}%] %name of player%"
+    set the player's tab list name to "<gray>[💖 %{Lives.%uuid of player%}%] %name of player%"
+    strike lightning effect at the player
+    loop 20 times:
+      teleport the player to {death%player%}
+      wait 1 tick
+    kick the player due to "<black>[ 💖 ]<red> respawning cooldown...;<white> You can now spectate people; respawning is on a cooldown..."
   if {player.LastChance.%uuid of player%} is true:
     set {player.LastChance.%uuid of player%} to false
     apply mining fatigue 255 without any particles whilst hiding the potion icon to the player for 60 seconds
@@ -442,6 +451,7 @@ on join:
 command uc.set.event() <integer>:
   permission: op
   trigger:
+    set {the_borderrrr} to false
     set {Disasters} to false
     set {all_hunters} to false
     set {around_the_world} to false
@@ -860,3 +870,5 @@ command uc.EA.Ghost_respawn() <player>:
     send "<red><bold>==========<white>{Private Information}<red>==========" to arg-1
     send "- This piece of information only you would know; it is recommended to keep this a secret from other people" to arg-1
     send "- You are back from the dead, you can kill anyone with a green name or above" to arg-1
+
+
