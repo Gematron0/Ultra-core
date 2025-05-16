@@ -1,9 +1,47 @@
 ### event ###
 # high lives health
 on heal:
-  {Lives.%uuid of player%} = 10 or 9 or 8:
+  if {Lives.%uuid of player%} = 10 or 9 or 8:
     if {helth_regen} is true:
       Cancel Event
+
+command uc.eb.lives_!=_heal <integer>:
+  permission: op
+  trigger:
+    set {health_regen_2} to arg-1
+      
+on heal:
+  if {Lives.%uuid of player%} = 10:
+    if {health_regen_2} = 10:
+      Cancel Event
+  else if {Lives.%uuid of player%} = 10 or 9:
+    if {health_regen_2} = 9:
+      Cancel Event
+  else if {Lives.%uuid of player%} = 10 or 9 or 8:
+    if {health_regen_2} = 8:
+      Cancel Event
+  else if {Lives.%uuid of player%} = 10 or 9 or 8 or 7:
+    if {health_regen_2} = 7:
+      Cancel Event
+  else if {Lives.%uuid of player%} = 10 or 9 or 8 or 7 or 6:
+    if {health_regen_2} = 6:
+      Cancel Event
+  else if {Lives.%uuid of player%} = 10 or 9 or 8 or 7 or 6 or 5:
+    if {health_regen_2} = 5:
+      Cancel Event
+  else if {Lives.%uuid of player%} = 10 or 9 or 8 or 7 or 6 or 5 or 4:
+    if {health_regen_2} = 4:
+      Cancel Event
+  else if {Lives.%uuid of player%} = 10 or 9 or 8 or 7 or 6 or 5 or 4 or 3:
+    if {health_regen_2} = 3:
+      Cancel Event
+  else if {Lives.%uuid of player%} = 10 or 9 or 8 or 7 or 6 or 5 or 4 or 3 or 2:
+    if {health_regen_2} = 2:
+      Cancel Event
+  else if {Lives.%uuid of player%} = 10 or 9 or 8 or 7 or 6 or 5 or 4 or 3 or 2 or 1:
+    if {health_regen_2} = 1:
+      Cancel Event
+
 # hunters
 command uc.hunters.start(DNR):
   permission: op

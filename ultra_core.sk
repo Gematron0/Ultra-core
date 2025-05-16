@@ -4,7 +4,7 @@
 command uc.version():
   permission: op
   trigger:
-    send "V2.3 (Border Overhall)"
+    send "V2.4 (FINAL PROB)"
 
 ### Join and leave system ###
 
@@ -870,5 +870,3 @@ command uc.EA.Ghost_respawn() <player>:
     send "<red><bold>==========<white>{Private Information}<red>==========" to arg-1
     send "- This piece of information only you would know; it is recommended to keep this a secret from other people" to arg-1
     send "- You are back from the dead, you can kill anyone with a green name or above" to arg-1
-
-
